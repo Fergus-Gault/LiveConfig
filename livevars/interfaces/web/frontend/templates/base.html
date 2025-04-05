@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <title>{% block title %}{% endblock %} - LiveVars</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <ul>
+        <li><a href="{{url_for('index')}}">Home</a></li>
+        <li><a href="{{url_for('classes')}}">Classes</a></li>
+        <li><a href="{{url_for('functions')}}">Functions</a></li>
+      </ul>
+    </nav>
+    <section class="content">
+      <header>
+        <h1>{% block header %}{% endblock %}</h1>
+      </header>
+      {% block content %}{% endblock %}
+    </section>
+  </body>
+</html>

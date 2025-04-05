@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block header
+%}Home{% endblock %}{% block content %}
+<h2>Welcome to LiveVars</h2>
+<p>
+  LiveVars is a tool for analyzing and visualizing the execution of Python code.
+</p>
+<p>Use the navigation bar to explore classes and functions.</p>
+<p>
+  To get started, check out the <a href="{{url_for('classes')}}">Classes</a> or
+  <a href="{{url_for('functions')}}">Functions</a>.
+</p>
+{% endblock %}

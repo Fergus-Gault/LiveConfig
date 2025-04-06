@@ -23,6 +23,10 @@ def liveclass(cls):
             return {name: getattr(self, name) for name in self._tracked_attrs if name != "_tracked_attrs"}
 
     LiveClass.__name__ = cls.__name__
+    LiveClass.__qualname__ = cls.__qualname__
+    LiveClass.__module__ = cls.__module__
+    LiveClass.__doc__ = cls.__doc__
+
     manager.register_class(LiveClass)
     return LiveClass
 

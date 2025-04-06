@@ -2,10 +2,14 @@
 A simple example of the CLI.
 Example usage:
     >>> test_class_instance name Bob
+    >>> test_class_instance a 10
+    >>> save
 """
 
-from livevars import liveclass, liveinstance, start_interface
+from livevars import liveclass, liveinstance, start_interface, FileHandler
 import time
+
+FileHandler("./examples/")
 
 @liveclass
 class CliTestClass:

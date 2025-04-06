@@ -3,6 +3,7 @@ class LiveManager:
         self.live_functions = {}
         self.live_classes = {}
         self.live_instances = {}
+        self.file_handler = None
 
     def register_function(self, func):
         """
@@ -25,6 +26,12 @@ class LiveManager:
         """
         if name in self.live_instances:
             raise ValueError(f"Instance with name {name} already exists.")
+        
+        # Load value from file if it exists, else use the default value
+        if self.file_handler.loaded_values is not None and "live_instances" in self.file_handler.loaded_values:
+            saved_attrs = self.file_handler.loaded_values["live_instances"].get(name, {})
+            instance = self.load_values_into_instance(instance, saved_attrs)
+        
         self.live_instances[name] = instance
         # Register the instance in its class if it has a _instances attribute
         cls = type(instance)
@@ -32,6 +39,14 @@ class LiveManager:
             cls._instances.append(instance)
         else:
             cls._instances = [instance]
+
+    def load_values_into_instance(self, instance, attrs):
+        """
+        Loads the values from the save file into the instance.
+        """
+        for attr, value in attrs.items():
+            setattr(instance, attr, value)
+        return instance
     
     def get_live_functions(self):
         """
@@ -83,4 +98,10 @@ class LiveManager:
         if instance is not None:
             return getattr(instance, attr_name)
             
+        return None
+    
+    def set_live_instance_attr_by_name(self, instance_name, attr_name, value):
+        instance = self.get_live_instance_by_name(instance_name)
+        if instance is not None:
+            return setattr(instance, attr_name, value)
         return None

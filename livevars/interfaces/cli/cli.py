@@ -32,6 +32,9 @@ def run_cli_thread():
                     user_input = session.prompt()
                     if user_input.strip().lower() in {"exit", "quit"}:
                         break
+                    if user_input.strip().lower() == "save":
+                        manager.file_handler.save()
+                        continue
                     parse_input(user_input)
                 except (EOFError, KeyboardInterrupt):
                     break
@@ -41,6 +44,9 @@ def run_cli_thread():
                 user_input = input(">>> ")
                 if user_input.strip().lower() in {"exit", "quit"}:
                     break
+                if user_input.strip().lower() == "save":
+                        manager.file_handler.save()
+                        continue
                 parse_input(user_input)
             except KeyboardInterrupt:
                 break

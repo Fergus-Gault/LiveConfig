@@ -4,3 +4,4 @@ env/
 __pycache__/
 docs/
 examples_env/
+*.json

@@ -9,7 +9,7 @@ def example_function(a, b, c=3):
 
 def test_livefunction_decorator():
     # Get the registered function in the manager (with full module path)
-    registered_function = manager.live_functions.get('tests.test_manager_livefunction_one_function.example_function')
+    registered_function = manager.live_functions.get('tests.manager.test_manager_livefunction_one_function.example_function')
 
     # Check if the function is registered
     assert registered_function is not None, "Function should be registered"

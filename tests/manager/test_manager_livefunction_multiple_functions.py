@@ -11,8 +11,8 @@ def example_2(x, y, z=5):
 
 def test_livefunction_decorator_multiple_functions():
     # Get the registered functions in the manager (with full module path)
-    registered_function_1 = manager.live_functions.get('tests.test_manager_livefunction_multiple_functions.example_1')
-    registered_function_2 = manager.live_functions.get('tests.test_manager_livefunction_multiple_functions.example_2')
+    registered_function_1 = manager.live_functions.get('tests.manager.test_manager_livefunction_multiple_functions.example_1')
+    registered_function_2 = manager.live_functions.get('tests.manager.test_manager_livefunction_multiple_functions.example_2')
 
     # Check if the functions are registered
     assert registered_function_1 is not None, "Function example_1 should be registered"

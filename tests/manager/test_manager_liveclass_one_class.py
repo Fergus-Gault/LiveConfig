@@ -3,9 +3,6 @@ from livevars.decorators import liveclass, livefunction
 
 @liveclass
 class SampleClass:
-    """
-    Test class to demonstrate the liveclass decorator
-    """
     def __init__(self, a: int, b: int) -> None:
         self.a = a
         self.b = b

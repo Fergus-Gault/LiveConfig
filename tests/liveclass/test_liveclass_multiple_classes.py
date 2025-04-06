@@ -2,9 +2,6 @@ from livevars.decorators import liveclass
 
 @liveclass
 class testClass1:
-    """
-    Test class to demonstrate the liveclass decorator
-    """
     def __init__(self, x: int, y: int) -> None:
         self.x = x
         self.y = y
@@ -14,9 +11,6 @@ class testClass1:
     
 @liveclass
 class testClass2:
-    """
-    Another test class to demonstrate the liveclass decorator
-    """
     def __init__(self, a: int, b: int) -> None:
         self.a = a
         self.b = b

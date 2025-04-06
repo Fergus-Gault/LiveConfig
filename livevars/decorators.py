@@ -6,6 +6,7 @@ def liveclass(cls):
     Decorator to track the attributes of a class and its instances
     """
     class LiveClass(cls):
+        _instances = []
         def __init__(self, *args, **kwargs) -> None:
             self._tracked_attrs = set()
             super().__init__(*args, **kwargs)
@@ -24,6 +25,18 @@ def liveclass(cls):
     LiveClass.__name__ = cls.__name__
     manager.register_class(LiveClass)
     return LiveClass
+
+def liveinstance(name=None):
+    """
+    Decorator to track the attributes of a class instance
+    """
+    def wrapper(obj):
+        if not hasattr(obj, "get_tracked_attrs") or not hasattr(obj, "get_tracked_attrs_values"):
+            raise TypeError("Instance is not from a @liveclass-decorated class. Use @liveclass on the class first.")
+        obj_name = name if name else f"instance_{id(obj)}"
+        manager.register_instance(obj_name, obj)
+        return obj
+    return wrapper
 
 def livefunction(func):
     """

@@ -10,4 +10,9 @@ def start_interface(interface=None):
         if interface == "web":
             from livevars.interfaces.web.server import run_web_interface
             run_web_interface()
+        elif interface == "cli":
+            from livevars.interfaces.cli.cli import run_cli
+            run_cli()
+        else:
+            raise ValueError("Invalid interface type.")
     

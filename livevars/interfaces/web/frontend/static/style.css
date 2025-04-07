@@ -33,3 +33,56 @@ h1 {
   padding: 14px 16px;
   text-decoration: none;
 }
+
+.class-instance {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+.instance-name {
+  margin-bottom: 10px;
+  color: #333;
+}
+.attributes-list {
+  list-style-type: none;
+  padding: 0;
+}
+.attribute-item {
+  margin-bottom: 5px;
+  color: #4f4f4f;
+}
+
+.save-button {
+  text-decoration: none;
+  text-align: center;
+  border: none;
+  background-color: #34a742;
+  color: white;
+  padding: 12px 24px;
+  display: inline-block;
+  border-radius: 4px;
+  margin: 10px 10px;
+}
+
+.save-button:hover {
+  cursor: pointer;
+  background-color: #2e9039;
+}
+
+.update-button {
+  text-decoration: none;
+  text-align: center;
+  border: none;
+  color: white;
+  padding: 6px 8px;
+  display: inline-block;
+  border-radius: 2px;
+  background-color: #393737;
+}
+
+.update-button:hover {
+  cursor: pointer;
+  background-color: #201e1e;
+}

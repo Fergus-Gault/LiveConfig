@@ -1,5 +1,7 @@
 from livevars import start_interface, liveclass, liveinstance
+import time
 
+start_interface("web")
 
 @liveclass
 class ExampleClass:
@@ -12,6 +14,9 @@ class ExampleClass:
     
 
 example_instance = liveinstance("example_instance")(ExampleClass(10, 5))
+another_instance = liveinstance("another_instance")(ExampleClass(17, 22))
 
-
-start_interface("web")
+while True:
+    print(f"Example instance: {example_instance.add()}")
+    print(f"Another instance: {another_instance.add()}")
+    time.sleep(2)

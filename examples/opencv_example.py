@@ -12,7 +12,7 @@ from livevars import liveclass, liveinstance, start_interface, FileHandler
 
 FileHandler("./examples/opencv_variables.json")
 
-start_interface("cli")
+start_interface("web")
 
 camera = cv2.VideoCapture(0)
 

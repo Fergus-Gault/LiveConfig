@@ -28,7 +28,7 @@ class LiveManager:
             raise ValueError(f"Instance with name {name} already exists.")
         
         # Load value from file if it exists, else use the default value
-        if self.file_handler.loaded_values is not None and "live_instances" in self.file_handler.loaded_values:
+        if self.file_handler is not None and self.file_handler.loaded_values is not None and "live_instances" in self.file_handler.loaded_values:
             saved_attrs = self.file_handler.loaded_values["live_instances"].get(name, {})
             instance = self.load_values_into_instance(instance, saved_attrs)
         
@@ -103,5 +103,33 @@ class LiveManager:
     def set_live_instance_attr_by_name(self, instance_name, attr_name, value):
         instance = self.get_live_instance_by_name(instance_name)
         if instance is not None:
-            return setattr(instance, attr_name, value)
+            attr_type = type(getattr(instance, attr_name))
+            try:
+                value = attr_type(value)
+                return setattr(instance, attr_name, value)
+            except Exception as e:
+                print(f"Failed to update: {e}")
+                return None
         return None
+    
+    def serialize_instances(self):
+        """
+        This member function serializes the live instances to be saved.
+        It removes any attributes that are not created by the user.
+        """
+        instances = self.live_instances
+        serialized_instances = {}
+        serialized_instances["live_instances"] = {}
+        for instance_name, live_instance in instances.items():
+            attributes = vars(live_instance)
+            clean_attrs = {}
+            for attr, value in attributes.items():
+                if attr.startswith("__") or attr.startswith("_tracked_attrs"):
+                    continue
+                try:
+                    clean_attrs[attr] = value
+                except (TypeError, ValueError):
+                    clean_attrs[attr] = str(value)
+
+            serialized_instances["live_instances"][instance_name] = clean_attrs
+        return serialized_instances

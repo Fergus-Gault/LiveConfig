@@ -1,7 +1,33 @@
 {% extends "base.html" %} {% block title %}LiveVars - Classes{% endblock %}
 {%block header %}Classes{% endblock %} {% block content %}
 <p>
-  This page lists all the classes in the codebase. Click on a class name to view
-  its details.
+  View and edit all instance attributes from within your program.
 </p>
-{% endblock %}
+<div>
+  <form method="post" , action="/save">
+    <button class="save-button" type="submit">Save All</button>
+  </form>
+</div>
+  {% for instance_name, attrs in class_instances.items() -%}
+  <div class="class-instance">
+    <h3 class="instance-name">{{ instance_name }}</h3>
+    <ul class="attributes-list">
+      {% for attr, value in attrs.items() -%}
+      <li class="attribute-item">
+        <form method="post" action="">
+          <strong>{{ attr }}:</strong>
+          <input type="text" name="value" value="{{ value }}" />
+          <input
+            type="hidden"
+            name="instance_name"
+            value="{{ instance_name }}"
+          />
+          <input type="hidden" name="attribute" value="{{ attr }}" />
+          <button class="update-button" type="submit">Update</button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %} {% endblock %}
+</div>

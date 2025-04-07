@@ -32,35 +32,13 @@ class FileHandler:
             with open(self.path, 'w') as file:
                 file.write('{}')
 
-    def serialize_instances(self):
-        """
-        This member function serializes the live instances to be saved.
-        It removes any attributes that are not created by the user.
-        """
-        instances = manager.live_instances
-        serialized_instances = {}
-        serialized_instances["live_instances"] = {}
-        for instance_name, live_instance in instances.items():
-            attributes = vars(live_instance)
-            clean_attrs = {}
-            for attr, value in attributes.items():
-                if attr.startswith("__") or attr.startswith("_tracked_attrs"):
-                    continue
-                try:
-                    json.dumps(value)
-                    clean_attrs[attr] = value
-                except (TypeError, ValueError):
-                    clean_attrs[attr] = str(value)
-
-            serialized_instances["live_instances"][instance_name] = clean_attrs
-        return serialized_instances
 
     def save(self):
         """
         Saves all of the live variables to the specified file.
         Returns True if success, False otherwise.
         """
-        serialized_instance = self.serialize_instances()
+        serialized_instance = manager.serialize_instances()
         try:
             with open(self.path, 'w') as file:
                 json.dump(serialized_instance, file, indent=4)

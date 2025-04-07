@@ -6,7 +6,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        "liveconfig.interfaces.web": ['frontend/templates/*.html', 'frontend/static/*.css'],
+        "liveconfig.interfaces.web.frontend": ['/templates/*.html', '/static/*.css'],
     },
     author="Fergus Gault",
     author_email="gaultfergus@gmail.com",

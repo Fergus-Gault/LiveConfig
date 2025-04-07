@@ -1,0 +1,2 @@
+recursive-include liveconfig/interfaces/web/frontend/templates *
+recursive-include liveconfig/interfaces/web/frontend/static *

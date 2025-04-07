@@ -1,12 +1,8 @@
 from flask import Flask, render_template, request
-import importlib.resources as pkg_resources
 from liveconfig.core import manager
 import threading
 
-templates_path = pkg_resources.files("liveconfig.interfaces.web.frontend") / "templates"
-static_path = pkg_resources.files("liveconfig.interfaces.web.frontend") / "static"
-
-app = Flask(__name__, template_folder=str(templates_path), static_folder=str(static_path))
+app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
 @app.route('/')
 def index():

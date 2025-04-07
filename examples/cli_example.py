@@ -6,7 +6,7 @@ Example usage:
     >>> save
 """
 
-from LiveConfig import liveclass, liveinstance, start_interface, FileHandler
+from liveconfig import liveclass, liveinstance, start_interface, FileHandler
 import time
 
 FileHandler("./examples/")

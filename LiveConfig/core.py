@@ -1,3 +1,3 @@
-from LiveConfig.manager import LiveManager
+from liveconfig.manager import LiveManager
 
 manager = LiveManager()

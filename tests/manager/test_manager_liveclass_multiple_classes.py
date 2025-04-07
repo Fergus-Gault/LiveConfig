@@ -1,5 +1,5 @@
-from LiveConfig.core import manager
-from LiveConfig.decorators import liveclass, livefunction
+from liveconfig.core import manager
+from liveconfig.decorators import liveclass, livefunction
 
 @liveclass
 class SampleClass1:

@@ -1,4 +1,4 @@
-from LiveConfig.decorators import liveclass
+from liveconfig.decorators import liveclass
 
 @liveclass
 class testClass:

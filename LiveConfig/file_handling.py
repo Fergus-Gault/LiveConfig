@@ -1,4 +1,4 @@
-from LiveConfig.core import manager
+from liveconfig.core import manager
 
 import os
 import json

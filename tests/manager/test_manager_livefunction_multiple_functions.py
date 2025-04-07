@@ -1,5 +1,5 @@
-from LiveConfig.decorators import livefunction
-from LiveConfig.core import manager
+from liveconfig.decorators import livefunction
+from liveconfig.core import manager
 
 @livefunction
 def example_1(a, b, c=3):

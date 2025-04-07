@@ -1,4 +1,4 @@
-from LiveConfig.decorators import livefunction
+from liveconfig.decorators import livefunction
 
 @livefunction
 def sample_function(a, b, c=0):

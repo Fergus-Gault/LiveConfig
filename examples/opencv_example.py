@@ -8,7 +8,7 @@ This changes the width of the frame without needing to restart the program.
 """
 
 import cv2
-from LiveConfig import liveclass, liveinstance, start_interface, FileHandler
+from liveconfig import liveclass, liveinstance, start_interface, FileHandler
 
 FileHandler("./examples/opencv_variables.json")
 

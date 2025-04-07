@@ -1,9 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="LiveConfig",
-    version="0.0.1",
+    name="liveconfig",
+    version="0.0.2",
     packages=find_packages(),
+    include_package_data=True,
+    package_data={
+        "liveconfig.interfaces.web": ['frontend/templates/*.html', 'frontend/static/*.css'],
+    },
     author="Fergus Gault",
     author_email="gaultfergus@gmail.com",
     description="Python package for developers which allows the live editing of variables, classes, and functions to ease development of large python programs. LiveConfig will allow you to interact with values during program execution through an interface of your choice. Values can be saved, and loaded on startup.",

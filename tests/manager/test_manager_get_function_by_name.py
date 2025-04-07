@@ -1,5 +1,5 @@
-from livevars import livefunction
-from livevars.core import manager
+from LiveConfig import livefunction
+from LiveConfig.core import manager
 
 @livefunction
 def add(a, b):

@@ -1,5 +1,5 @@
-from livevars.decorators import livefunction
-from livevars.core import manager
+from LiveConfig.decorators import livefunction
+from LiveConfig.core import manager
 
 
 @livefunction

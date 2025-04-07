@@ -1,4 +1,4 @@
-from livevars import start_interface, liveclass, liveinstance
+from LiveConfig import start_interface, liveclass, liveinstance
 import time
 
 start_interface("web")

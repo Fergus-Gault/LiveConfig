@@ -1,5 +1,5 @@
-from livevars import liveclass, liveinstance
-from livevars.core import manager
+from LiveConfig import liveclass, liveinstance
+from LiveConfig.core import manager
 
 @liveclass
 class SampleClass:

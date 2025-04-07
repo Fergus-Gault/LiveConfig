@@ -1,5 +1,5 @@
 import threading
-from livevars.core import manager
+from LiveConfig.core import manager
 
 def run_cli():
     """

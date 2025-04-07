@@ -1,5 +1,5 @@
 from functools import wraps
-from livevars.core import manager
+from LiveConfig.core import manager
 
 def liveclass(cls):
     """

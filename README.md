@@ -1,10 +1,10 @@
-# **LiveVars**
+# **LiveConfig**
 
-LiveVars is an in-development python package with the goal of making it easier to develop large scale python programs. LiveVars will allow a developer to edit variables while a program is running, reducing the need to stop and restart a program.
+LiveConfig is an in-development python package with the goal of making it easier to develop large scale python programs. LiveConfig will allow a developer to edit variables while a program is running, reducing the need to stop and restart a program.
 
 ## **Motivation**
 
-The inspiration for LiveVars came from a recent computer vision project of mine, where certain values and thresholds needed to be tweaked often, which involved a lot of restarting the program, which took ages each time.
+The inspiration for LiveConfig came from a recent computer vision project of mine, where certain values and thresholds needed to be tweaked often, which involved a lot of restarting the program, which took ages each time.
 
 I ended up making a GUI using PyQt for several important thresholds, however this was tedious to do, and adding additional fields was time consuming. Additionally, running PyQt slowed down my program, and it wanted to use the main thread.
 
@@ -12,9 +12,9 @@ I had the idea to make a python package that would allow easy variable editing t
 
 ## **End Goals**
 
-I want LiveVars to be very simple to use for the end-user, intuitive, and with as little performance overhead as possible.
+I want LiveConfig to be very simple to use for the end-user, intuitive, and with as little performance overhead as possible.
 
-I will view LiveVars as "complete" when:
+I will view LiveConfig as "complete" when:
 
 - The user can edit function parameters, variables, and class attributes live.
 - The user can choose which interface they wish to use:

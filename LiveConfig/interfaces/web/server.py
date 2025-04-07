@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from livevars.core import manager
+from LiveConfig.core import manager
 import threading
 
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')

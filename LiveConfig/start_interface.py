@@ -18,11 +18,11 @@ def start_interface(interface=None, **kwargs):
                     except Exception as e:
                         print(f"Failed to set port to {value}, using port 5000: {e}")
                     break
-            from livevars.interfaces.web.server import run_web_interface
+            from LiveConfig.interfaces.web.server import run_web_interface
             run_web_interface(port)
 
         elif interface == "cli":
-            from livevars.interfaces.cli.cli import run_cli
+            from LiveConfig.interfaces.cli.cli import run_cli
             run_cli()
         else:
             

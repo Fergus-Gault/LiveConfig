@@ -1,5 +1,5 @@
-from livevars import liveclass, liveinstance, FileHandler
-from livevars.core import manager
+from LiveConfig import liveclass, liveinstance, FileHandler
+from LiveConfig.core import manager
 
 FileHandler("./tests/filehandler/")
 @liveclass

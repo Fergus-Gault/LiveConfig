@@ -1,6 +1,10 @@
 import threading
 from liveconfig.core import manager
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def run_cli():
     """
     Run the CLI thread.
@@ -69,27 +73,9 @@ def parse_input(user_input):
             return
 
         instance_name, attr_name, value = parts
-        instance = manager.get_live_instance_by_name(instance_name)
 
-        if instance is None:
-            print(f"No instance found with name '{instance_name}'")
-            return
-
-        # Get current type of the attribute
-        current_attr_value = getattr(instance, attr_name, None)
-        if current_attr_value is None:
-            print(f"'{attr_name}' does not exist on '{instance_name}'")
-            return
-
-        attr_type = type(current_attr_value)
-        try:
-            new_value = attr_type(value)  # Try to cast to the same type
-            # Set new value
-            setattr(instance, attr_name, new_value)
-            print(f"Set {instance_name}.{attr_name} = {new_value}")
-        except Exception as e:
-            print(f"Types do not match. Must by type {attr_type}")
-
+        # Set new value
+        manager.set_live_instance_attr_by_name(instance_name, attr_name, value)
 
     except Exception as e:
-        print(f"Error parsing input: {e}")
+        logger.error(f"ERROR: Error parsing input: {e}")

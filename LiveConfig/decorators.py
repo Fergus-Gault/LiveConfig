@@ -1,4 +1,3 @@
-from functools import wraps
 from liveconfig.core import manager
 
 def liveclass(cls):
@@ -40,23 +39,4 @@ def liveinstance(name=None):
         obj_name = name if name else f"instance_{id(obj)}"
         manager.register_instance(obj_name, obj)
         return obj
-    return wrapper
-
-def livefunction(func):
-    """
-    Decorator to track the parameters of a function and their values
-    """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        wrapper.tracked_params = {
-            "args": args,
-            "kwargs": kwargs
-        }
-        wrapper.tracked_params_values = {
-            **{f"arg{i}": arg for i, arg in enumerate(args)},
-            **kwargs
-        }
-        return func(*args, **kwargs)
-    
-    manager.register_function(wrapper)
     return wrapper

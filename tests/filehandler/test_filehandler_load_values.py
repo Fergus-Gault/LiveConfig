@@ -1,7 +1,7 @@
-from liveconfig import liveclass, liveinstance, FileHandler
+from liveconfig import liveclass, liveinstance, LiveConfig
 from liveconfig.core import manager
 
-FileHandler("./tests/filehandler/")
+LiveConfig("./tests/filehandler/")
 
 @liveclass
 class SampleClass:

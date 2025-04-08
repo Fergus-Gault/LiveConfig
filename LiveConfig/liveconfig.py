@@ -2,9 +2,12 @@ from liveconfig.core import manager
 
 import os
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-class FileHandler:
+class LiveConfig:
     def __init__(self, path=None):
         self.path = path
         self.setup_file()
@@ -42,10 +45,10 @@ class FileHandler:
         try:
             with open(self.path, 'w') as file:
                 json.dump(serialized_instance, file, indent=4)
-                print("Successfully saved live variables.")
+                logger.info("Successfully saved live variables.")
             return True
         except Exception as e:
-            print(f"Error saving file: {e}")
+            logger.error(f"ERROR: Error saving file: {e}")
             return False
         
     def load(self):
@@ -60,6 +63,6 @@ class FileHandler:
                 self.loaded_values = json.load(file)
             return True
         except Exception as e:
-            print(f"Error loading: {e}")
+            logger.error(f"ERROR: Error loading: {e}")
             return False
         

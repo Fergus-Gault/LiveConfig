@@ -6,10 +6,10 @@ Example usage:
     >>> save
 """
 
-from liveconfig import liveclass, liveinstance, start_interface, FileHandler
+from liveconfig import liveclass, liveinstance, start_interface, LiveConfig
 import time
 
-FileHandler("./examples/")
+LiveConfig("./examples/")
 
 @liveclass
 class CliTestClass:

@@ -1,17 +1,13 @@
+import logging
+from liveconfig.typechecker import TypeChecker
+
+logger = logging.getLogger(__name__)
+
 class LiveManager:
     def __init__(self):
-        self.live_functions = {}
         self.live_classes = {}
         self.live_instances = {}
         self.file_handler = None
-
-    def register_function(self, func):
-        """
-        Register a function to be tracked
-        """
-        key = f"{func.__module__}.{func.__name__}"
-        self.live_functions[key] = func
-        return func
     
     def register_class(self, cls):
         """
@@ -48,23 +44,11 @@ class LiveManager:
             setattr(instance, attr, value)
         return instance
     
-    def get_live_functions(self):
-        """
-        Get all live functions
-        """
-        return self.live_functions
-    
     def get_live_classes(self):
         """
         Get all live classes
         """
         return self.live_classes
-    
-    def get_live_function_by_name(self, func_name):
-        """
-        Get a live function by name
-        """
-        return self.live_functions.get(func_name)
     
     def get_live_class_by_name(self, class_name):
         """
@@ -88,29 +72,50 @@ class LiveManager:
         if instance_name in self.live_instances:
             return self.live_instances[instance_name]
         else:
+            logger.warning(f"WARNING: Instance '{instance_name}' does not exist")
             return None
         
-    def get_live_instance_attr_by_name(self, instance_name, attr_name):
+    def get_live_instance_attr_by_name(self, instance, attr_name):
         """
         Get an attribute of a live instance by name
         """
-        instance = self.get_live_instance_by_name(instance_name)
         if instance is not None:
-            return getattr(instance, attr_name)
-            
-        return None
+            attr = getattr(instance, attr_name, None)
+            if attr is None:
+                logger.warning(f"WARNING: Attribute '{attr_name}' does not exist on '{instance}'")
+            return attr
+        
     
     def set_live_instance_attr_by_name(self, instance_name, attr_name, value):
         instance = self.get_live_instance_by_name(instance_name)
+        if instance is None: return None
+        attr = self.get_live_instance_attr_by_name(instance, attr_name)
+        if attr is None: return None
+        
         if instance is not None:
             attr_type = type(getattr(instance, attr_name))
+            if attr_type == bool:
+                value = TypeChecker.handle_bool(value)
+            elif attr_type == int:
+                value = TypeChecker.handle_int(value)
+            elif attr_type == tuple:
+                value = TypeChecker.handle_tuple(value, instance, attr_name)
+                if value is None:
+                    return None
+            elif attr_type == list:
+                value = TypeChecker.handle_list(value, instance, attr_name)
+                if value is None:
+                    return None
             try:
                 value = attr_type(value)
                 return setattr(instance, attr_name, value)
             except Exception as e:
-                print(f"Failed to update: {e}")
+                logger.warning(f"WARNING: Failed to update: {e}")
                 return None
         return None
+    
+
+    
     
     def serialize_instances(self):
         """

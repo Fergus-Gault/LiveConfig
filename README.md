@@ -1,27 +1,64 @@
-# **LiveConfig**
+# **LiveConfig** - v0.1.0-beta
 
-LiveConfig is an in-development python package with the goal of making it easier to develop large scale python programs. LiveConfig will allow a developer to edit variables while a program is running, reducing the need to stop and restart a program.
+LiveConfig is a Python package that allows developers to edit variables in real-time. All variables can be saved to a .json file and loaded automatically on startup. No more restarting your program every time you make a minor adjustment.
 
-## **Motivation**
+> ⚠️ This is a beta release (v0.1.0-beta). APIs and features may change in future updates.
 
-The inspiration for LiveConfig came from a recent computer vision project of mine, where certain values and thresholds needed to be tweaked often, which involved a lot of restarting the program, which took ages each time.
+## Features
 
-I ended up making a GUI using PyQt for several important thresholds, however this was tedious to do, and adding additional fields was time consuming. Additionally, running PyQt slowed down my program, and it wanted to use the main thread.
+- Class attribute editing - Edit attributes of class instances in real-time.
+- File-handling - Attributes and values are saved to a file and automatically loaded on startup.
+- Multiple interfaces\* - Interact with LiveConfig through the command line or a web interface.
+- Easy to use - Adding an instance to LiveConfig only requires editing one line of code.
 
-I had the idea to make a python package that would allow easy variable editing through an interface of choice. I wanted the setup for the end-user to be as simple as a decorator before a class, or a slight change to a definition.
+\* Interface system is under development — currently supports CLI and basic web interface. More coming soon!
 
-## **End Goals**
+## Installation
 
-I want LiveConfig to be very simple to use for the end-user, intuitive, and with as little performance overhead as possible.
+```bash
+pip install liveconfig
+```
 
-I will view LiveConfig as "complete" when:
+## Usage
 
-- The user can edit function parameters, variables, and class attributes live.
-- The user can choose which interface they wish to use:
-  - Web
-  - CLI
-  - GUI
-- The user can save variables to a database or file of choice, which is then loaded on program execution.
-- No more than 2 lines of code need to be modified to add/remove a live variable.
-- The interface can be disabled easily with a user runtime flag and have little performance impact.
-- Sufficient security so others on the network cannot modify variables without permission.
+```python
+from liveconfig import LiveConfig, liveclass, liveinstance, start_interface
+
+# Initialize LiveConfig with the path to your JSON save file
+LiveConfig("./files/variables.json")
+
+# Start the user interface — use "cli" or "web" (more coming soon)
+start_interface("web", port=5000)
+
+# Decorate your class to make it live-editable
+@liveclass
+class Config:
+    def __init__(self):
+        self.text = "Hello, World"
+        self.width = 640
+        self.height = 480
+
+# Register an instance of the class for editing
+config = liveinstance("config")(Config())
+
+```
+
+- `@liveclass` - Marks a class so its instances can be tracked and edited.
+- `liveinstance(name)` - Registers a specific instance for live editing, using the given name as its identifier.
+
+## Future Features
+
+- Support for functions and individual variables
+- Support for databases
+- More interface options
+- Allow users to create their own interface
+- Ability to prevent an attribute being changed.
+- Ensure minimal overhead if LiveConfig is disabled.
+
+## About
+
+LiveConfig is a lightweight Python package that lets you update variables at runtime—perfect for live-tuning values in long-running processes like computer vision pipelines, simulations, or game logic. No more restarting your program for every tweak.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

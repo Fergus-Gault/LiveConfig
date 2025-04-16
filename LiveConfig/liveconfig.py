@@ -61,7 +61,7 @@ class LiveConfig:
         If exists then loads into position.
         """
         try:
-            with open(self.path) as file:
+            with open(self.path, 'r') as file:
                 loaded_values = json.load(file)
             saved_instances = loaded_values.get("live_instances", {})
             for name, attrs in saved_instances.items():

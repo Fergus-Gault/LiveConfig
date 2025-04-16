@@ -2,32 +2,36 @@ from liveconfig.core import manager
 
 def liveclass(cls):
     """
-    Decorator to track the attributes of a class and its instances
+    Decorator to track the attributes of a class and register it with the manager.
+    This decorator adds methods to the class to track attributes and their values.
+    It ensures that the class is still recognised by IDEs and type checkers.
     """
-    class LiveClass(cls):
-        _instances = []
-        def __init__(self, *args, **kwargs) -> None:
-            self._tracked_attrs = set()
-            super().__init__(*args, **kwargs)
+    original_init = cls.__init__
+    original_setattr = getattr(cls, '__setattr__', object.__setattr__)
 
-        def __setattr__(self, name, value) -> None:
-            super().__setattr__(name, value)
-            if name != "_tracked_attrs":
-                self._tracked_attrs.add(name)
+    def __init__(self, *args, **kwargs):
+        self._tracked_attrs = set()
+        original_init(self, *args, **kwargs)
 
-        def get_tracked_attrs(self):
-            return {attr for attr in self._tracked_attrs if attr != "_tracked_attrs"}
-        
-        def get_tracked_attrs_values(self):
-            return {name: getattr(self, name) for name in self._tracked_attrs if name != "_tracked_attrs"}
+    def __setattr__(self, name, value):
+        original_setattr(self, name, value)
+        if name != "_tracked_attrs":
+            self._tracked_attrs.add(name)
 
-    LiveClass.__name__ = cls.__name__
-    LiveClass.__qualname__ = cls.__qualname__
-    LiveClass.__module__ = cls.__module__
-    LiveClass.__doc__ = cls.__doc__
+    def get_tracked_attrs(self):
+        return {attr for attr in self._tracked_attrs if attr != "_tracked_attrs"}
 
-    manager.register_class(LiveClass)
-    return LiveClass
+    def get_tracked_attrs_values(self):
+        return {name: getattr(self, name) for name in self._tracked_attrs if name != "_tracked_attrs"}
+
+    cls.__init__ = __init__
+    cls.__setattr__ = __setattr__
+    cls.get_tracked_attrs = get_tracked_attrs
+    cls.get_tracked_attrs_values = get_tracked_attrs_values
+
+    manager.register_class(cls)
+    return cls
+
 
 def liveinstance(name=None):
     """

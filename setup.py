@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="liveconfig",
-    version="0.1.0-beta",
+    version="0.1.1-beta",
     packages=find_packages(),
     include_package_data=True,
     package_data={

@@ -11,7 +11,7 @@ setup(
     author="Fergus Gault",
     author_email="gaultfergus@gmail.com",
     description="Python package for developers which allows the live editing of class instance attributes to ease development of large python programs. LiveConfig will allow you to interact with values during program execution through an interface of your choice. Values can be saved, and loaded on startup.",
-    long_description=open("README.md").read(),
+    long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     python_requires=">=3.8",
     install_requires=[

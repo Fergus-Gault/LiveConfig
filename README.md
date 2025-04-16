@@ -1,8 +1,8 @@
-# **LiveConfig** - v0.1.0-beta
+# **LiveConfig** - v0.1.1-beta
 
 LiveConfig is a Python package that allows developers to edit variables in real-time. All variables can be saved to a .json file and loaded automatically on startup. No more restarting your program every time you make a minor adjustment.
 
-> ⚠️ This is a beta release (v0.1.0-beta). APIs and features may change in future updates.
+> ⚠️ This is a beta release (v0.1.1-beta). APIs and features may change in future updates.
 
 ## Features
 
@@ -23,8 +23,7 @@ pip install liveconfig
 
 ```python
 from liveconfig import LiveConfig, liveclass, liveinstance, start_interface
-
-# Initialize LiveConfig with the path to your JSON save file
+# Initialize LiveConfig with the path to your JSON save file, do this before any other imports
 LiveConfig("./files/variables.json")
 
 # Start the user interface — use "cli" or "web" (more coming soon)
@@ -43,6 +42,7 @@ config = liveinstance("config")(Config())
 
 ```
 
+- `LiveConfig(path)` - **MUST** be done before importing any live classes or instances, recommended to do right after importing LiveConfig
 - `@liveclass` - Marks a class so its instances can be tracked and edited.
 - `liveinstance(name)` - Registers a specific instance for live editing, using the given name as its identifier.
 
@@ -54,6 +54,7 @@ config = liveinstance("config")(Config())
 - Allow users to create their own interface
 - Ability to prevent an attribute being changed.
 - Ensure minimal overhead if LiveConfig is disabled.
+- Function triggers, runs a function once.
 
 ## About
 

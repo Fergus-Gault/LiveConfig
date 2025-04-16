@@ -23,7 +23,7 @@ def classes():
         attribute = request.form.get('attribute')
         value = request.form.get('value')
         manager.set_live_instance_attr_by_name(instance_name, attribute, value)
-    return render_template('classes.html', class_instances=manager.serialize_instances()["live_instances"])
+    return render_template('classes.html', class_instances=manager.file_handler.serialize_instances()["live_instances"])
 
 
 @app.route('/save', methods=['POST'])
@@ -32,6 +32,14 @@ def save():
     Save the current variables.
     """
     manager.file_handler.save()
+    return '', 204
+
+@app.route('/reload', methods=['POST'])
+def reload():
+    """
+    Reload the current variables.
+    """
+    manager.file_handler.reload()
     return '', 204
 
 

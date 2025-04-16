@@ -34,29 +34,43 @@ def run_cli_thread():
             while True:
                 try:
                     user_input = session.prompt()
-                    if user_input.strip().lower() in {"exit", "quit"}:
+                    response = handle_inputs(user_input)
+                    if response == 0:
                         break
-                    if user_input.strip().lower() == "save":
-                        manager.file_handler.save()
+                    elif response == 1:
                         continue
-                    parse_input(user_input)
+                    else:
+                        parse_input(user_input)
                 except (EOFError, KeyboardInterrupt):
                     break
     else:
         while True:
             try:
                 user_input = input(">>> ")
-                if user_input.strip().lower() in {"exit", "quit"}:
+                response = handle_inputs(user_input)
+                if response == 0:
                     break
-                if user_input.strip().lower() == "save":
-                        manager.file_handler.save()
-                        continue
-                parse_input(user_input)
+                elif response == 1:
+                    continue
+                else:
+                    parse_input(user_input)
             except KeyboardInterrupt:
                 break
-    
-    
 
+def handle_inputs(user_input):
+    if user_input.strip().lower() in {"exit", "quit"}:
+        return 0
+    if user_input.strip().lower() == "save":
+        manager.file_handler.save()
+        return 1
+    if user_input.strip().lower() == "list":
+        print(manager.get_all_instances())
+        return 1
+    # if user_input.strip().lower() == "reload":
+    #     manager.file_handler.reload()
+    #     return 1
+    
+    
 
 def parse_input(user_input):
     """

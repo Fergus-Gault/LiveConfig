@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="liveconfig",
-    version="0.1.0",
+    version="0.1.0-beta",
     packages=find_packages(),
     include_package_data=True,
     package_data={
@@ -21,6 +21,7 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
+        "Development Status :: 4 - Beta",
     ],
     license="MIT",
     url="https://github.com/Fergus-Gault/LiveConfig",

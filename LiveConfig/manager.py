@@ -65,6 +65,12 @@ class LiveManager:
             return getattr(cls, "_instances", [])
         return None
     
+    def get_all_instances(self):
+        """
+        Get all live instances
+        """
+        return self.live_instances
+    
     def get_live_instance_by_name(self, instance_name):
         """
         Get a live class instance by name
@@ -81,60 +87,25 @@ class LiveManager:
         """
         if instance is not None:
             attr = getattr(instance, attr_name, None)
-            if attr is None:
+            if not hasattr(instance, attr_name):
                 logger.warning(f"WARNING: Attribute '{attr_name}' does not exist on '{instance}'")
             return attr
         
     
     def set_live_instance_attr_by_name(self, instance_name, attr_name, value):
+        """
+        Set an attribute of a live instance.
+        Type is parsed from the input string.
+        """
         instance = self.get_live_instance_by_name(instance_name)
-        if instance is None: return None
+        if instance is None: return
         attr = self.get_live_instance_attr_by_name(instance, attr_name)
-        if attr is None: return None
-        
-        if instance is not None:
-            attr_type = type(getattr(instance, attr_name))
-            if attr_type == bool:
-                value = TypeChecker.handle_bool(value)
-            elif attr_type == int:
-                value = TypeChecker.handle_int(value)
-            elif attr_type == tuple:
-                value = TypeChecker.handle_tuple(value, instance, attr_name)
-                if value is None:
-                    return None
-            elif attr_type == list:
-                value = TypeChecker.handle_list(value, instance, attr_name)
-                if value is None:
-                    return None
+        if attr is None: return
+        value = TypeChecker.handle_type(instance, attr_name, value)
+        if value is not None:            
             try:
-                value = attr_type(value)
-                return setattr(instance, attr_name, value)
+                setattr(instance, attr_name, value)
             except Exception as e:
-                logger.warning(f"WARNING: Failed to update: {e}")
-                return None
-        return None
+                logger.warning(f"WARNING: Failed to update: {e}. Reverting to previous value.")
+        return
     
-
-    
-    
-    def serialize_instances(self):
-        """
-        This member function serializes the live instances to be saved.
-        It removes any attributes that are not created by the user.
-        """
-        instances = self.live_instances
-        serialized_instances = {}
-        serialized_instances["live_instances"] = {}
-        for instance_name, live_instance in instances.items():
-            attributes = vars(live_instance)
-            clean_attrs = {}
-            for attr, value in attributes.items():
-                if attr.startswith("__") or attr.startswith("_tracked_attrs"):
-                    continue
-                try:
-                    clean_attrs[attr] = value
-                except (TypeError, ValueError):
-                    clean_attrs[attr] = str(value)
-
-            serialized_instances["live_instances"][instance_name] = clean_attrs
-        return serialized_instances

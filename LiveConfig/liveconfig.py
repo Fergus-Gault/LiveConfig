@@ -3,6 +3,7 @@ from liveconfig.core import manager
 import os
 import json
 import logging
+import ast
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +42,7 @@ class LiveConfig:
         Saves all of the live variables to the specified file.
         Returns True if success, False otherwise.
         """
-        serialized_instance = manager.serialize_instances()
+        serialized_instance = self.serialize_instances()
         try:
             with open(self.path, 'w') as file:
                 json.dump(serialized_instance, file, indent=4)
@@ -55,14 +56,62 @@ class LiveConfig:
         """
         Loads all of the variables from the specified file.
         Saves type as a class variable.
+        Everything is stored as a string, then evaluated when loaded.
         Manager then checks if values exist upon registering a live variable.
         If exists then loads into position.
         """
         try:
             with open(self.path) as file:
-                self.loaded_values = json.load(file)
+                loaded_values = json.load(file)
+            saved_instances = loaded_values.get("live_instances", {})
+            for name, attrs in saved_instances.items():
+                for attr, value in attrs.items():
+                    # Attempt to evaluate the type from the saved string.
+                    try:
+                        value = ast.literal_eval(value)
+                    except (ValueError, SyntaxError):
+                        value = str(value)
+                    attrs[attr] = value
+                saved_instances[name] = attrs
+            self.loaded_values = {"live_instances": saved_instances}
             return True
         except Exception as e:
             logger.error(f"ERROR: Error loading: {e}")
             return False
         
+    def reload(self):
+        """
+        Reloads the variables from the file.
+        """
+        try:
+            self.load()
+            saved_instances = self.loaded_values.get("live_instances", {})
+            for name, attrs in saved_instances.items():
+                instance = manager.live_instances.get(name)
+                if instance:
+                    manager.load_values_into_instance(instance, attrs)
+            logger.info("Successfully reloaded live variables.")
+            return True
+        except Exception as e:
+            logger.error(f"ERROR: Error reloading file: {e}")
+            return False
+        
+    def serialize_instances(self):
+        """
+        This member function serializes the live instances to be saved.
+        It removes any attributes that are not created by the user.
+        All attributes are converted to strings, so tuples/sets are not stored as lists.
+        """
+        instances = manager.live_instances
+        serialized_instances = {}
+        serialized_instances["live_instances"] = {}
+        for instance_name, live_instance in instances.items():
+            attributes = vars(live_instance)
+            clean_attrs = {}
+            for attr, value in attributes.items():
+                if attr.startswith("__") or attr.startswith("_tracked_attrs"):
+                    continue
+                clean_attrs[attr] = str(value)
+
+            serialized_instances["live_instances"][instance_name] = clean_attrs
+        return serialized_instances

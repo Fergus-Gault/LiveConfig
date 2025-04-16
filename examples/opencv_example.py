@@ -27,6 +27,7 @@ class ExampleClass:
         self.show_text = False
         self.color = (255, 255, 255)
         self.mixed_tuple = (0, "Hello", 3.14, True)
+        self.nested_tuple = (0, ("Hello", 3.14, True))
         self.mixed_list = [1, "Goodbye", 2.71, False]
 
 example = liveinstance("example_instance")(ExampleClass("Hello, World"))
@@ -45,6 +46,8 @@ while True:
     cv2.putText(frame, example.text, text_position, cv2.FONT_HERSHEY_SIMPLEX, example.font_scale, example.color, 2)
     cv2.putText(frame, str(example.mixed_tuple), (100, 200), cv2.FONT_HERSHEY_SIMPLEX, example.font_scale, example.color, 2)
     cv2.putText(frame, str(example.mixed_list), (100, 400), cv2.FONT_HERSHEY_SIMPLEX, example.font_scale, example.color, 2)
+    
+    cv2.putText(frame, str(example.nested_tuple), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, example.font_scale, example.color, 2)
     if example.show_text and example.threshold > 0.5:
         cv2.putText(frame, "Hidden text", (100,100), cv2.FONT_HERSHEY_SIMPLEX, example.font_scale, example.color, 2)
 

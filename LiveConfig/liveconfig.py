@@ -1,12 +1,9 @@
 from liveconfig.core import manager
+from . import logger
 
 import os
 import json
-import logging
 import ast
-
-logger = logging.getLogger(__name__)
-
 
 class LiveConfig:
     def __init__(self, path=None):

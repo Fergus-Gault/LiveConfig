@@ -1,7 +1,5 @@
-import logging
+from . import logger
 from liveconfig.typechecker import TypeChecker
-
-logger = logging.getLogger(__name__)
 
 class LiveManager:
     def __init__(self):

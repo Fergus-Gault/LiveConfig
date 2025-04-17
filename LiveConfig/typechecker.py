@@ -1,7 +1,6 @@
-import logging
+from . import logger
 import ast
 
-logger = logging.getLogger(__name__)
 
 class TypeChecker:
 

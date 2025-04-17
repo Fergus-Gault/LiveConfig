@@ -1,9 +1,7 @@
 import threading
 from liveconfig.core import manager
 
-import logging
-
-logger = logging.getLogger(__name__)
+from ... import logger
 
 def run_cli():
     """

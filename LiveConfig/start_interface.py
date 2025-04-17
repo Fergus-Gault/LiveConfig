@@ -1,6 +1,5 @@
-import logging
+from . import logger
 
-logger = logging.getLogger(__name__)
 
 def start_interface(interface=None, **kwargs):
     """

@@ -1,10 +1,9 @@
 import logging
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(message)s',
-    handlers=[logging.StreamHandler()]
-)
+
+logger = logging.getLogger('liveconfig')
+
+logger.addHandler(logging.NullHandler())
 
 from .start_interface import start_interface
 from .decorators import liveclass, liveinstance

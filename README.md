@@ -1,8 +1,8 @@
-# **LiveConfig** - v0.1.1-beta
+# **LiveConfig** - v0.1.2-beta
 
 LiveConfig is a Python package that allows developers to edit variables in real-time. All variables can be saved to a .json file and loaded automatically on startup. No more restarting your program every time you make a minor adjustment.
 
-> ⚠️ This is a beta release (v0.1.1-beta). APIs and features may change in future updates.
+> ⚠️ This is a beta release (v0.1.2-beta). APIs and features may change in future updates.
 
 ## Features
 

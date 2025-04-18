@@ -25,6 +25,17 @@ def classes():
         manager.set_live_instance_attr_by_name(instance_name, attribute, value)
     return render_template('classes.html', class_instances=manager.file_handler.serialize_instances()["live_instances"])
 
+@app.route('/variables', methods=['GET', 'POST'])
+def variables():
+    """
+    Render all of the live variables with their values.
+    Update values on form submission.
+    """
+    if request.method == 'POST':
+        variable_name = request.form.get('name')
+        value = request.form.get('value')
+        manager.set_live_variable_by_name(variable_name, value)
+    return render_template('variables.html', live_variables=manager.file_handler.serialize_variables()["live_variables"])
 
 @app.route('/save', methods=['POST'])
 def save():

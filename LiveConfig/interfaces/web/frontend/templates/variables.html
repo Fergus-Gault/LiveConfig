@@ -1,0 +1,27 @@
+{% extends "base.html" %} {% block title %}LiveConfig - Classes{% endblock %}
+{%block header %}Classes{% endblock %} {% block content %}
+<p>View and edit all live variables from within your program.</p>
+<div class="buttons-container">
+  <form method="post" , action="/save">
+    <button class="save-button" type="submit">Save All</button>
+  </form>
+  <!-- <form method="post", action="/reload">
+    <button class="reload-button" type="submit">Reload</button>
+  </form> -->
+</div>
+{% for name, value in live_variables.items() -%}
+    <div class="class-instance">
+    <h3 class="instance-name">{{ name }}</h3>
+    <ul class="attributes-list">
+        <li class="attribute-item">
+        <form method="post" action="">
+            <strong>{{ name }}:</strong>
+            <input type="text" name="value" value="{{ value }}" />
+            <input type="hidden" name="name" value="{{ name }}" />
+            <button class="update-button" type="submit">Update</button>
+        </form>
+        </li>
+    </ul>
+    </div>
+  {% endfor %} {% endblock %}
+</div>

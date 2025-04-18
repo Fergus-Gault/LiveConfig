@@ -40,9 +40,11 @@ class LiveConfig:
         Returns True if success, False otherwise.
         """
         serialized_instance = self.serialize_instances()
+        serialized_variables = self.serialize_variables()
+        data = {**serialized_instance, **serialized_variables}
         try:
             with open(self.path, 'w') as file:
-                json.dump(serialized_instance, file, indent=4)
+                json.dump(data, file, indent=4)
                 logger.info("Successfully saved live variables.")
             return True
         except Exception as e:
@@ -60,6 +62,8 @@ class LiveConfig:
         try:
             with open(self.path, 'r') as file:
                 loaded_values = json.load(file)
+            
+            # Load live instances
             saved_instances = loaded_values.get("live_instances", {})
             for name, attrs in saved_instances.items():
                 for attr, value in attrs.items():
@@ -71,6 +75,17 @@ class LiveConfig:
                     attrs[attr] = value
                 saved_instances[name] = attrs
             self.loaded_values = {"live_instances": saved_instances}
+
+            # Load live variables
+            saved_variables = loaded_values.get("live_variables", {})
+            for name, value in saved_variables.items():
+                try:
+                    value = ast.literal_eval(value)
+                except (ValueError, SyntaxError):
+                    value = str(value)
+                saved_variables[name] = value
+            self.loaded_values["live_variables"] = saved_variables
+
             return True
         except Exception as e:
             logger.error(f"ERROR: Error loading: {e}")
@@ -83,10 +98,11 @@ class LiveConfig:
         try:
             self.load()
             saved_instances = self.loaded_values.get("live_instances", {})
-            for name, attrs in saved_instances.items():
-                instance = manager.live_instances.get(name)
-                if instance:
-                    manager.load_values_into_instance(instance, attrs)
+            manager.load_values_into_instances(saved_instances)
+
+            saved_variables = self.loaded_values.get("live_variables", {})
+            manager.load_values_into_variables(saved_variables)
+
             logger.info("Successfully reloaded live variables.")
             return True
         except Exception as e:
@@ -112,3 +128,19 @@ class LiveConfig:
 
             serialized_instances["live_instances"][instance_name] = clean_attrs
         return serialized_instances
+    
+
+    def serialize_variables(self):
+        """
+        This member function serializes the live variables to be saved.
+        All variables are converted to strings, so tuples/sets are not stored as lists.
+        """
+        variables = manager.live_variables
+        serialized_variables = {}
+        serialized_variables["live_variables"] = {}
+        for var_name, var_obj in variables.items():
+            if isinstance(var_obj.value, (int, float, str, bool, tuple, list, set)):
+                serialized_variables["live_variables"][var_name] = str(var_obj.value)
+            else:
+                raise TypeError(f"Unsupported variable type: {type(var_obj.value)}")
+        return serialized_variables

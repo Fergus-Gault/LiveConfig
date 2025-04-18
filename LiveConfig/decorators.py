@@ -1,4 +1,5 @@
 from liveconfig.core import manager
+from liveconfig.definitions.livevariable import LiveVariable
 
 def liveclass(cls):
     """
@@ -36,6 +37,7 @@ def liveclass(cls):
 def liveinstance(name=None):
     """
     Decorator to track the attributes of a class instance
+    Usage: instance = liveinstance("instance_name")(MyClass())
     """
     def wrapper(obj):
         if not hasattr(obj, "get_tracked_attrs") or not hasattr(obj, "get_tracked_attrs_values"):
@@ -44,3 +46,20 @@ def liveinstance(name=None):
         manager.register_instance(obj_name, obj)
         return obj
     return wrapper
+    
+
+def livevar(name=None):
+    """
+    Decorator to track the value of a variable.
+    Usage: variable = livevar("variable_name")(value)
+    """
+    def wrapper(value):
+        if not isinstance(value, (int, float, str, bool, tuple, list, set)):
+            raise TypeError("Value must be a basic type (int, float, str, bool, tuple, list, set).")
+        if name is None:
+            raise ValueError("Variable name must be provided.")
+        live_variable = LiveVariable(name, value)
+        manager.register_variable(name, live_variable)
+        return live_variable
+    return wrapper
+

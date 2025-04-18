@@ -1,10 +1,12 @@
 from . import logger
 from liveconfig.typechecker import TypeChecker
 
+
 class LiveManager:
     def __init__(self):
         self.live_classes = {}
         self.live_instances = {}
+        self.live_variables = {}
         self.file_handler = None
     
     def register_class(self, cls):
@@ -33,6 +35,12 @@ class LiveManager:
             cls._instances.append(instance)
         else:
             cls._instances = [instance]
+
+    def load_values_into_instances(self, saved_instances):
+        for name, attrs in saved_instances.items():
+            instance = self.live_instances.get(name)
+            if instance:
+                self.load_values_into_instance(instance, attrs)
 
     def load_values_into_instance(self, instance, attrs):
         """
@@ -99,11 +107,69 @@ class LiveManager:
         if instance is None: return
         attr = self.get_live_instance_attr_by_name(instance, attr_name)
         if attr is None: return
-        value = TypeChecker.handle_type(instance, attr_name, value)
+        value = TypeChecker.handle_instance_type(instance, attr_name, value)
         if value is not None:            
             try:
                 setattr(instance, attr_name, value)
             except Exception as e:
                 logger.warning(f"WARNING: Failed to update: {e}. Reverting to previous value.")
         return
+    
+    def register_variable(self, name, live_variable):
+        """
+        Register a variable to be tracked.
+        """
+        if name in self.live_variables:
+            raise ValueError(f"Variable with name {name} already exists.")
+        
+        # Ensure that the value within the live variable is a basic type
+        if not isinstance(live_variable.value, (int, float, str, bool, tuple, list, set)):
+            raise TypeError("Value must be a basic type (int, float, str, bool, tuple, list, set).")
+        
+        # Load value from file if it exists, else use the default value
+        if self.file_handler is not None and self.file_handler.loaded_values is not None and "live_variables" in self.file_handler.loaded_values:
+            saved_value = self.file_handler.loaded_values["live_variables"].get(name, None)
+            if saved_value is not None:
+                # If the value is in the file, then assign it to the live variable, and store the object itself in the set
+                live_variable.value = TypeChecker.handle_variable_type(saved_value)
+                self.live_variables[name] = live_variable
+            else:
+                # If the value is not in the file, then assign the default value to the live variable, and store the object itself in the set
+                self.live_variables[name] = live_variable
+        else:
+            # If the file handler is not set, then just store the live variable in the set
+            self.live_variables[name] = live_variable
+    
+    def get_live_variables(self):
+        """
+        Get all live variables
+        """
+        return self.live_variables
+    
+    def get_live_variable_by_name(self, name):
+        """
+        Get a live variable by name
+        """
+        return self.live_variables.get(name)
+    
+    def get_live_variable_value_by_name(self, name):
+        """
+        Get the value of a live variable by name
+        """
+        live_variable = self.get_live_variable_by_name(name)
+        if live_variable:
+            return live_variable.value
+        return None
+    
+    def set_live_variable_by_name(self, name, value):
+        """
+        Set a live variable by name and update any references to it
+        """
+        if name not in self.live_variables:
+            raise ValueError(f"Variable with name {name} does not exist.")
+        self.live_variables[name].value = TypeChecker.handle_variable_type(value)
+    
+    def load_values_into_variables(self, saved_variables):
+        for name, value in saved_variables.items():
+            self.set_live_variable_by_name(name, value)
     

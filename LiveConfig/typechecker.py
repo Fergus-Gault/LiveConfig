@@ -4,7 +4,7 @@ import ast
 
 class TypeChecker:
 
-    def handle_type(instance: object, attr_name: str, value):
+    def handle_instance_type(instance: object, attr_name: str, value):
         # TODO: Add support for objects, enums, and other types.
         attr = type(getattr(instance, attr_name))
         if attr == bool:
@@ -18,6 +18,16 @@ class TypeChecker:
             value = type(getattr(instance, attr_name))(value)
 
         return value
+    
+    def handle_variable_type(value):
+        """
+        Handle variable types from interface.
+        """
+        try:
+            new_value = ast.literal_eval(value)
+        except (ValueError, SyntaxError) as e:
+            new_value = value
+        return new_value
 
 
     def handle_bool(value):

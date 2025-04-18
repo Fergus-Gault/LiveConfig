@@ -8,7 +8,11 @@ This changes the width of the frame without needing to restart the program.
 """
 
 import cv2
-from liveconfig import liveclass, liveinstance, start_interface, LiveConfig
+from liveconfig import liveclass, liveinstance, start_interface, LiveConfig, livevar
+import logging
+
+logger = logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s %(filename)s:%(lineno)d')
+logger = logging.getLogger(__name__)
 
 LiveConfig("./examples/opencv_variables.json")
 
@@ -33,6 +37,10 @@ class ExampleClass:
 example = liveinstance("example_instance")(ExampleClass("Hello, World"))
 
 
+test_var = livevar("test_var")(42)
+
+test_var2 = livevar("test_var2")(42)
+
 while True:
     ret, frame = camera.read()
     if not ret:
@@ -50,6 +58,8 @@ while True:
     cv2.putText(frame, str(example.nested_tuple), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, example.font_scale, example.color, 2)
     if example.show_text and example.threshold > 0.5:
         cv2.putText(frame, "Hidden text", (100,100), cv2.FONT_HERSHEY_SIMPLEX, example.font_scale, example.color, 2)
+
+    cv2.putText(frame, str(test_var > test_var2), (100, 300), cv2.FONT_HERSHEY_SIMPLEX, example.font_scale, example.color, 2)
 
     cv2.imshow("frame", frame)
 

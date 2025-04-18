@@ -1,6 +1,11 @@
 from liveconfig import livevar
 from liveconfig.core import manager
 
+import pytest
+
+@pytest.fixture(autouse=True)
+def reset_manager():
+    manager.live_variables = {}
 
 def test_live_var_registers():
     """

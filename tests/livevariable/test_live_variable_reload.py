@@ -1,6 +1,10 @@
-from liveconfig import livevar, LiveConfig
-LiveConfig("./tests/livevariable/test_live_variable_reload.json")
+from liveconfig import livevar
 from liveconfig.core import manager
+import pytest
+
+@pytest.fixture(autouse=True)
+def reset_manager():
+    manager.live_variables = {}
 
 def test_live_variable_reload():
     """

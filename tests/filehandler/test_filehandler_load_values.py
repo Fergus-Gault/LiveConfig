@@ -1,8 +1,6 @@
 from liveconfig import liveclass, liveinstance, LiveConfig
 from liveconfig.core import manager
 
-LiveConfig("./tests/filehandler/")
-
 @liveclass
 class SampleClass:
     def __init__(self, name, age):

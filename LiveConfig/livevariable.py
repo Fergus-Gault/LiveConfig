@@ -1,5 +1,5 @@
 from functools import total_ordering
-from .. import logger
+from . import logger
 
 @total_ordering
 class LiveVariable:

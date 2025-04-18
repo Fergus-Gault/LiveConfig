@@ -1,5 +1,5 @@
-from liveconfig.core import manager
-from liveconfig.definitions.livevariable import LiveVariable
+from liveconfig.livevariable import LiveVariable
+from liveconfig.registration import Register
 
 def liveclass(cls):
     """
@@ -30,7 +30,7 @@ def liveclass(cls):
     cls.get_tracked_attrs = get_tracked_attrs
     cls.get_tracked_attrs_values = get_tracked_attrs_values
 
-    manager.register_class(cls)
+    Register.cls(cls)
     return cls
 
 
@@ -43,7 +43,7 @@ def liveinstance(name=None):
         if not hasattr(obj, "get_tracked_attrs") or not hasattr(obj, "get_tracked_attrs_values"):
             raise TypeError("Instance is not from a @liveclass-decorated class. Use @liveclass on the class first.")
         obj_name = name if name else f"instance_{id(obj)}"
-        manager.register_instance(obj_name, obj)
+        Register.instance(obj_name, obj)
         return obj
     return wrapper
     
@@ -59,7 +59,7 @@ def livevar(name=None):
         if name is None:
             raise ValueError("Variable name must be provided.")
         live_variable = LiveVariable(name, value)
-        manager.register_variable(name, live_variable)
+        Register.variable(name, live_variable)
         return live_variable
     return wrapper
 

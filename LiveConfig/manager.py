@@ -71,11 +71,36 @@ class LiveManager:
             return getattr(cls, "_instances", [])
         return None
     
-    def get_all_instances(self):
+    def list_all_instances(self):
         """
         Get all live instances
         """
-        return self.live_instances
+        string = ""
+        for name, instance in self.live_instances.items():
+            string += f"{name}: {instance}\n"
+        return string
+    
+    def list_instance_attrs_by_name(self, instance_name):
+        """
+        Get all attributes of a live instance by name
+        """
+        instance = self.get_live_instance_by_name(instance_name)
+        if instance:
+            string = ""
+            attrs = instance.get_tracked_attrs_values()
+            for attr, value in attrs.items():
+                string += f"{attr}: {value}\n"
+            return string
+        return None
+    
+    def list_all_attributes(self, instance_name):
+        """
+        Get all attributes of a live instance
+        """
+        instance = self.get_live_instance_by_name(instance_name)
+        if instance:
+            return instance.get_tracked_attrs()
+        return None
     
     def get_live_instance_by_name(self, instance_name):
         """
@@ -172,4 +197,23 @@ class LiveManager:
     def load_values_into_variables(self, saved_variables):
         for name, value in saved_variables.items():
             self.set_live_variable_by_name(name, value)
+
+
+    def list_all_variables(self):
+        """
+        Get all live variables
+        """
+        string = ""
+        for name, _ in self.live_variables.items():
+            string += f"{name}\n"
+        return string
+    
+    def list_variable_by_name(self, name):
+        """
+        Get a live variable by name
+        """
+        variable = self.get_live_variable_by_name(name)
+        if variable:
+            return variable.value
+        return None
     

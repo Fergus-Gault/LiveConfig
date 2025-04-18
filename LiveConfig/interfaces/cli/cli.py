@@ -26,7 +26,12 @@ def run_cli_thread():
         use_prompt_toolkit = True
     except Exception as e:
         use_prompt_toolkit = False
-    print("Usage: <instance_name> <attr_name> <new_value>")
+    print(
+        "Usage: \n"
+        "Format to edit an instance: <i/instance> <instance_name> <attr_name> <value>\n"
+        "Format to edit a variable: <v/variable> <variable_name> <value>\n"
+        "Commands: quit, save, reload, list\n"
+    )
     if use_prompt_toolkit:
         with patch_stdout():
             while True:
@@ -56,17 +61,33 @@ def run_cli_thread():
                 break
 
 def handle_inputs(user_input):
-    if user_input.strip().lower() in {"exit", "quit"}:
+    parts = user_input.strip().split(" ")
+    if user_input.strip().lower() in {"exit", "quit", "ex", "q"}:
         return 0
     if user_input.strip().lower() == "save":
         manager.file_handler.save()
         return 1
-    if user_input.strip().lower() == "list":
-        print(manager.get_all_instances())
+    if parts[0].strip().lower() == "list":
+        if len(parts) == 2:
+            if parts[1].strip().lower() in {"instances", "instance", "i"}:
+                print(manager.list_all_instances())
+            elif parts[1].strip().lower() in {"variables", "variable", "v"}:
+                print(manager.list_all_variables())
+            else:
+                print("Please specify 'instances' or 'variables' to list. e.g 'list instances'")
+        elif len(parts) == 3:
+            if parts[1].strip().lower() in {"instances", "instance", "i"}:
+                print(manager.list_instance_attrs_by_name(parts[2]))
+            elif parts[1].strip().lower() in {"variables", "variable", "v"}:
+                print(manager.list_variable_by_name(parts[2]))
+            else:
+                print("Please specify 'instances' or 'variables' to list. e.g 'list instances <name>'")
+        else:
+            print("Please specify 'instances' or 'variables' to list. e.g 'list instances <name>'")
         return 1
-    # if user_input.strip().lower() == "reload":
-    #     manager.file_handler.reload()
-    #     return 1
+    if user_input.strip().lower() == "reload":
+        manager.file_handler.reload()
+        return 1
     
     
 
@@ -79,15 +100,32 @@ def parse_input(user_input):
 
     """
     try:
-        parts = user_input.strip().split(" ", 2)
-        if len(parts) != 3:
-            print("Invalid input format. Use: <instance_name> <attr_name> <new_value>")
+        method = user_input[0].lower()
+        if method not in ("i", "instance", "v", "variable"):
+            print("Invalid method. Use 'i' or 'v' for instance or variable.")
             return
+        
+        if method in ("i", "instance"):
+            parts = user_input.strip().split(" ", 3)
+            if len(parts) != 4:
+                print("Invalid input format. Use: <instance_name> <attr_name> <new_value>")
+                return
 
-        instance_name, attr_name, value = parts
+            _, instance_name, attr_name, value = parts
 
-        # Set new value
-        manager.set_live_instance_attr_by_name(instance_name, attr_name, value)
+            # Set new value
+            manager.set_live_instance_attr_by_name(instance_name, attr_name, value)
+        
+        elif method in ("v", "variable"):
+            parts = user_input.strip().split(" ", 2)
+            if len(parts) != 3:
+                print("Invalid input format. Use: <variable_name> <new_value>")
+                return
+
+            _, variable_name, value = parts
+
+            # Set new value
+            manager.set_live_variable_by_name(variable_name, value)
 
     except Exception as e:
-        logger.error(f"ERROR: Error parsing input: {e}")
+        pass

@@ -30,6 +30,7 @@ def run_cli_thread():
         "Usage: \n"
         "Format to edit an instance: <i/instance> <instance_name> <attr_name> <value>\n"
         "Format to edit a variable: <v/variable> <variable_name> <value>\n"
+        "Format to trigger a function: <t/trigger> <function_name> *<arg1_name=value> *<arg2_name=value> ...\n"
         "Commands: quit, save, reload, list\n"
     )
     if use_prompt_toolkit:
@@ -73,13 +74,17 @@ def handle_inputs(user_input):
                 print(manager.list_all_instances())
             elif parts[1].strip().lower() in {"variables", "variable", "v"}:
                 print(manager.list_all_variables())
+            elif parts[1].strip().lower() in {"triggers", "trigger", "t"}:
+                print(manager.list_all_triggers())
             else:
-                print("Please specify 'instances' or 'variables' to list. e.g 'list instances'")
+                print("Please specify 'instances', 'variables', or 'triggers' to list. e.g 'list instances'")
         elif len(parts) == 3:
             if parts[1].strip().lower() in {"instances", "instance", "i"}:
                 print(manager.list_instance_attrs_by_name(parts[2]))
             elif parts[1].strip().lower() in {"variables", "variable", "v"}:
                 print(manager.list_variable_by_name(parts[2]))
+            elif parts[1].strip().lower() in {"triggers", "trigger", "t"}:
+                print(manager.list_all_trigger_args(parts[2]))
             else:
                 print("Please specify 'instances' or 'variables' to list. e.g 'list instances <name>'")
         else:
@@ -101,7 +106,7 @@ def parse_input(user_input):
     """
     try:
         method = user_input[0].lower()
-        if method not in ("i", "instance", "v", "variable"):
+        if method not in ("i", "instance", "v", "variable", "t", "trigger"):
             print("Invalid method. Use 'i' or 'v' for instance or variable.")
             return
         
@@ -126,6 +131,29 @@ def parse_input(user_input):
 
             # Set new value
             manager.set_live_variable_by_name(variable_name, value)
+
+        elif method in ("t", "trigger"):
+            parts = user_input.strip().split(" ", 1)
+            if len(parts) < 2:
+                print("Invalid input format. Use: <function_name> <*arg1> <*arg2> ...")
+                return
+
+            _, function_name_and_args = parts
+            function_parts = function_name_and_args.split(" ", 1)
+            function_name = function_parts[0].strip()
+            args = function_parts[1].split(" ") if len(function_parts) > 1 else []
+
+            # Convert args to a dictionary of keyword arguments
+            kwargs = {}
+            for arg in args:
+                if "=" in arg:
+                    key, value = arg.split("=", 1)
+                    kwargs[key.strip()] = value.strip()
+                else:
+                    print(f"Invalid argument format: {arg}. Use key=value format.")
+                    return
+
+            manager.trigger_function_by_name(function_name, **kwargs)
 
     except Exception as e:
         pass

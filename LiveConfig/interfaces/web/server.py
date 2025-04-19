@@ -53,6 +53,18 @@ def reload():
     manager.file_handler.reload()
     return '', 204
 
+@app.route('/triggers', methods=['GET', 'POST'])
+def triggers():
+    """
+    Render all of the function triggers with their kwargs if they have any.
+    Run the function on form submission.
+    """
+    if request.method == 'POST':
+        function_name = request.form.get('function_name')
+        kwargs = {param_name: request.form.get(f'arg[{param_name}]') for param_name in manager.get_function_args_by_name(function_name)}
+        manager.trigger_function_by_name(function_name, **kwargs)
+    return render_template('triggers.html', function_triggers=manager.function_triggers)
+
 
 def run_web_interface(port):
     """

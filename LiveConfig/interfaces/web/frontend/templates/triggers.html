@@ -1,0 +1,30 @@
+{% extends "base.html" %} {% block title %}Triggers{% endblock %} {% block
+content %}
+<p>Trigger functions.</p>
+{% for func_name, properties in function_triggers.items() %}
+<div class="class-instance">
+  <h3 class="instance-name">{{ func_name }}</h3>
+  <form method="post" action="">
+    <ul class="attributes-list">
+      {% for param_name in properties.param_names %}
+      <li class="attribute-item">
+        <label for="{{ func_name }}-{{ param_name }}">
+          <strong>{{ param_name }}:</strong>
+        </label>
+        <input
+          type="text"
+          id="{{ func_name }}-{{ param_name }}"
+          name="arg[{{ param_name }}]"
+          value=""
+        />
+      </li>
+      {% endfor %}
+    </ul>
+    <input type="hidden" name="function_name" value="{{ func_name }}" />
+    {% if csrf_token %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    {% endif %}
+    <button class="trigger-button" type="submit">Trigger</button>
+  </form>
+</div>
+{% endfor %}{% endblock %}

@@ -8,7 +8,7 @@ This changes the width of the frame without needing to restart the program.
 """
 
 import cv2
-from liveconfig import liveclass, liveinstance, start_interface, LiveConfig, livevar
+from liveconfig import liveclass, liveinstance, start_interface, LiveConfig, livevar, trigger
 import logging
 
 logger = logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s %(filename)s:%(lineno)d')
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 LiveConfig("./examples/opencv_variables.json")
 
-start_interface("web")
+start_interface("cli")
 
 camera = cv2.VideoCapture(0)
 
@@ -37,11 +37,27 @@ class ExampleClass:
 example = liveinstance("example_instance")(ExampleClass("Hello, World"))
 
 
+@trigger
+def example_trigger(field=12):
+    logger.info(f"Trigger called: {field}")
+
+@trigger
+def example_trigger2(field, field2):
+    logger.info(f"Trigger2 called: {field} {field2}")
+    example_trigger(field2)
+
+running = True
+@trigger
+def change_running():
+    global running
+    running = not running
+
+
 test_var = livevar("test_var")(42)
 
 test_var2 = livevar("test_var2")(42)
 
-while True:
+while running:
     ret, frame = camera.read()
     if not ret:
         print("Error reading frame")

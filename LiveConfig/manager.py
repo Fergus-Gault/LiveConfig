@@ -184,10 +184,42 @@ class LiveManager:
         function_info = self.function_triggers[name]
         func = function_info["function"]
         
+        corrected_args = {}
+
+        for arg_name in function_info["param_names"]:
+            if arg_name in kwargs:
+                corrected_arg = TypeChecker.handle_variable_type(kwargs[arg_name])
+                corrected_args[arg_name] = corrected_arg
+        
         try:
-            result = func(**kwargs)
+            result = func(**corrected_args)
             self.function_triggers[name]["kwargs"] = kwargs.get("kwargs", [])
             return result
         except Exception as e:
             logger.warning(f" Failed to trigger function '{name}': {e}")
             return None
+        
+    
+    def list_all_triggers(self) -> str:
+        """
+        List all triggers
+        """
+        string = ""
+        for name, func_info in self.function_triggers.items():
+            string += f"{name}: {func_info['function']}\n"
+        return string
+    
+    
+    def list_all_trigger_args(self, name: str) -> str:
+        """
+        List all trigger arguments
+        """
+        function_info = self.get_function_by_name(name)
+        if function_info:
+            string = ""
+            for arg in function_info["param_names"]:
+                string += f"{arg}\n"
+            if len(function_info["param_names"]) == 0:
+                string += "No arguments"
+            return string
+        return None

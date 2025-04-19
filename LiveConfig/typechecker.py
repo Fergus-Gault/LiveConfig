@@ -4,14 +4,12 @@ import ast
 
 class TypeChecker:
 
-    def handle_instance_type(instance: object, attr_name: str, value):
+    def handle_instance_type(instance: object, attr_name: str, value: str):
         # TODO: Add support for objects, enums, and other types.
         attr = type(getattr(instance, attr_name))
-        if attr == bool:
-            value = TypeChecker.handle_bool(value)
-        elif attr == int or attr == float:
-            value = TypeChecker.handle_numerical(value)
-        elif attr == tuple or attr == list or attr == set:
+        if attr in {int, float, bool}:
+            value = TypeChecker.handle_non_iterable(value)
+        elif attr in {list, tuple, set}:
             item = getattr(instance, attr_name, None)
             value = TypeChecker.handle_iterable(value, item)
         else:
@@ -19,7 +17,7 @@ class TypeChecker:
 
         return value
     
-    def handle_variable_type(value):
+    def handle_variable_type(value: str):
         """
         Handle variable types from interface.
         """
@@ -29,19 +27,8 @@ class TypeChecker:
             new_value = value
         return new_value
 
-
-    def handle_bool(value):
-        """
-        Handle boolean values from interface.
-        """
-        if isinstance(value, str):
-            if value.lower() in ["true", "1", "yes", "y"]:
-                return True
-            elif value.lower() in ["false", "0", "no", "n"]:
-                return False
-        return value
     
-    def handle_numerical(value):
+    def handle_non_iterable(value: str):
         """
         Handles numerical values from the interface.
         """
@@ -49,11 +36,11 @@ class TypeChecker:
         try:
             value = ast.literal_eval(value)
         except (ValueError, SyntaxError) as e:
-            logger.warning(f"WARNING: Failed to parse numerical value: {e}")
+            logger.warning(f"Failed to parse numerical value: {e}")
             return None
         return value
     
-    def handle_iterable(value, iterable):
+    def handle_iterable(value: str, iterable):
         """
         Handles parsing of iterable types from the interface.
         """
@@ -61,6 +48,6 @@ class TypeChecker:
         try:
             iterable = ast.literal_eval(value)
         except (ValueError, SyntaxError) as e:
-            logger.warning(f"WARNING: Failed to parse iterable value: {e}")
+            logger.warning(f"Failed to parse iterable value: {e}")
             return
         return iterable

@@ -1,7 +1,7 @@
 from . import logger
 
 
-def start_interface(interface=None, **kwargs):
+def start_interface(interface=None, **kwargs) -> None:
     """
     Start the live interface for the given interface.
     'web' - Locally hosted web interface.
@@ -19,7 +19,7 @@ def start_interface(interface=None, **kwargs):
                     try:
                         port = int(value)
                     except Exception as e:
-                        logger.warning(f"WARNING: Failed to set port to {value}, using port 5000: {e}")
+                        logger.warning(f"Failed to set port to {value}, using port 5000: {e}")
                     break
             from liveconfig.interfaces.web.server import run_web_interface
             run_web_interface(port)

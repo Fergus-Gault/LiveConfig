@@ -3,14 +3,14 @@ from liveconfig.typechecker import TypeChecker
 
 class Register:
 
-    def cls(cls):
+    def cls(cls: object) -> object:
         """
         Register a class to be tracked
         """
         manager.live_classes[cls.__name__] = cls
         return cls
     
-    def instance(name, instance):
+    def instance(name, instance: object) -> None:
         """
         Register an instance of a class to be tracked
         """
@@ -31,7 +31,7 @@ class Register:
             cls._instances = [instance]
 
 
-    def variable(name, live_variable):
+    def variable(name, live_variable: object) -> None:
         """
         Register a variable to be tracked.
         It ensures that the value is a basic type.
@@ -53,3 +53,33 @@ class Register:
                 manager.live_variables[name] = live_variable
         else:
             manager.live_variables[name] = live_variable
+
+
+    def trigger(func: callable, param_names=None, args=None, kwargs=None) -> callable:
+        """
+        Register a function to be tracked.
+        It ensures that the function is callable, and if it already is registered, it updates the args and kwargs.
+        Triggers are not saved to file as the only purpose is to call them once.
+        """
+        if not callable(func):
+            raise TypeError("Function must be callable.")
+        
+        func_name = func.__name__
+        
+        # Update existing entry or create new one
+        if func_name in manager.function_triggers:
+            if args is not None:
+                manager.function_triggers[func_name]["args"] = args
+            if kwargs is not None:
+                manager.function_triggers[func_name]["kwargs"] = kwargs
+            if param_names is not None:
+                manager.function_triggers[func_name]["param_names"] = param_names
+        else:
+            manager.function_triggers[func_name] = {
+                "function": func,
+                "param_names": param_names or [],
+                "args": args or [],
+                "kwargs": kwargs or {}
+            }
+        
+        return func

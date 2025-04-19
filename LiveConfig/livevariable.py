@@ -8,7 +8,7 @@ class LiveVariable:
     This class allows for dynamic tracking of variable values and provides
     a consistent interface for mathematical operations and comparisons.
     """
-    def __init__(self, name, value):
+    def __init__(self, name, value) -> None:
         self.name = name
         self._value = value
 
@@ -17,7 +17,7 @@ class LiveVariable:
         return self._value
 
     @value.setter
-    def value(self, new_value):
+    def value(self, new_value) -> None:
         self._value = new_value
 
     # Dynamically delegate mathematical and comparison operations

@@ -14,7 +14,7 @@ class LiveConfig:
         self.loaded_values = None
         self.load()
 
-    def setup_file(self):
+    def setup_file(self) -> None:
         """
         This member method sets up the file for saving and loading variables.
         If the filepath is provided by the user, otherwise it uses a default one.
@@ -34,7 +34,7 @@ class LiveConfig:
                 file.write('{}')
 
 
-    def save(self):
+    def save(self) -> bool:
         """
         Saves all of the live variables to the specified file.
         Returns True if success, False otherwise.
@@ -48,10 +48,10 @@ class LiveConfig:
                 logger.info("Successfully saved live variables.")
             return True
         except Exception as e:
-            logger.error(f"ERROR: Error saving file: {e}")
+            logger.error(f"Error saving file: {e}")
             return False
         
-    def load(self):
+    def load(self) -> bool:
         """
         Loads all of the variables from the specified file.
         Saves type as a class variable.
@@ -88,10 +88,10 @@ class LiveConfig:
 
             return True
         except Exception as e:
-            logger.error(f"ERROR: Error loading: {e}")
+            logger.error(f"Error loading: {e}")
             return False
         
-    def reload(self):
+    def reload(self) -> bool:
         """
         Reloads the variables from the file.
         """
@@ -106,10 +106,10 @@ class LiveConfig:
             logger.info("Successfully reloaded live variables.")
             return True
         except Exception as e:
-            logger.error(f"ERROR: Error reloading file: {e}")
+            logger.error(f"Error reloading file: {e}")
             return False
         
-    def serialize_instances(self):
+    def serialize_instances(self) -> dict:
         """
         This member function serializes the live instances to be saved.
         It removes any attributes that are not created by the user.
@@ -130,7 +130,7 @@ class LiveConfig:
         return serialized_instances
     
 
-    def serialize_variables(self):
+    def serialize_variables(self) -> dict:
         """
         This member function serializes the live variables to be saved.
         All variables are converted to strings, so tuples/sets are not stored as lists.

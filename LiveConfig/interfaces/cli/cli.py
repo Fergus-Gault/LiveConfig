@@ -1,12 +1,9 @@
 import threading
 from liveconfig.core import manager
 
-from ... import logger
 
 def run_cli():
-    """
-    Run the CLI thread.
-    """
+    """Run the CLI thread."""
     threading.Thread(target=run_cli_thread, daemon=True).start()
 
 
@@ -61,7 +58,19 @@ def run_cli_thread():
             except KeyboardInterrupt:
                 break
 
-def handle_inputs(user_input):
+def handle_inputs(user_input: str):
+    """
+    This function handles the inputs from the user.
+    It runs the appropriate function based on the input.
+
+    Args:
+        user_input (str): Input from the user.
+
+    Returns:
+        Literal: Returns 0 if the user wants to exit, 
+        1 if the user wants to save, 
+        and None otherwise.
+    """
     parts = user_input.strip().split(" ")
     if user_input.strip().lower() in {"exit", "quit", "ex", "q"}:
         return 0
@@ -96,13 +105,13 @@ def handle_inputs(user_input):
     
     
 
-def parse_input(user_input):
+def parse_input(user_input: str) -> None:
     """
-    This function parses the input from the user.
+    This function parses the user input 
+    and calls the appropriate function to set the value.
 
-    It checks for at least three distinct parts, instance name, attribute name, and the new value.
-    It ensures that the new value is the same type as the current value, and handles errors graciously.
-
+    Args:
+        user_input (str): Input from the user.
     """
     try:
         method = user_input[0].lower()

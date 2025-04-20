@@ -5,49 +5,42 @@ import ast
 class TypeChecker:
 
     def handle_instance_type(instance: object, attr_name: str, value: str):
+        """Handle instance types from the interface."""
         # TODO: Add support for objects, enums, and other types.
         attr = type(getattr(instance, attr_name))
-        if attr in {int, float, bool}:
-            value = TypeChecker.handle_non_iterable(value)
-        elif attr in {list, tuple, set}:
-            item = getattr(instance, attr_name, None)
-            value = TypeChecker.handle_iterable(value, item)
+        if attr in {int, float, bool, list, tuple, set}:
+            parsed_value = TypeChecker.handle_type(value)
         else:
-            value = type(getattr(instance, attr_name))(value)
+            parsed_value = type(getattr(instance, attr_name))(value)
 
-        return value
+        return parsed_value
     
     def handle_variable_type(value: str):
-        """
-        Handle variable types from interface.
-        """
+        """Handle variable types from interface."""
         try:
-            new_value = ast.literal_eval(value)
+            parsed_value = ast.literal_eval(value)
         except (ValueError, SyntaxError) as e:
-            new_value = value
-        return new_value
+            parsed_value = value
+        return parsed_value
 
     
-    def handle_non_iterable(value: str):
+    def handle_type(value: str):
         """
-        Handles numerical values from the interface.
+        Handles the conversion of a string representation 
+        to the appropriate type.
+
+        Args:
+            value (str): The string representation of the type.
+        
+        Raises:
+            ValueError: If the value cannot be parsed into a type.
+            SyntaxError: If the value has a syntax error.
+
+        Returns:
+            int | float | bool | list | tuple | set: The parsed value.
         """
-        # TODO: Add support for complex numbers and other numerical types, increase checking.
+        # TODO: Add support for more types
         try:
-            value = ast.literal_eval(value)
+            return ast.literal_eval(value)
         except (ValueError, SyntaxError) as e:
-            logger.warning(f"Failed to parse numerical value: {e}")
-            return None
-        return value
-    
-    def handle_iterable(value: str, iterable):
-        """
-        Handles parsing of iterable types from the interface.
-        """
-        # TODO:Increase checking for tuples, so that sizes are checked.
-        try:
-            iterable = ast.literal_eval(value)
-        except (ValueError, SyntaxError) as e:
-            logger.warning(f"Failed to parse iterable value: {e}")
-            return
-        return iterable
+            logger.warning(f"Failed to parse value: {e}")

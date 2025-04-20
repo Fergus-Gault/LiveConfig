@@ -1,6 +1,5 @@
 from liveconfig.livevariable import LiveVariable
 from liveconfig.registration import Register
-import inspect
 
 
 def liveclass(cls: object) -> object:
@@ -36,7 +35,7 @@ def liveclass(cls: object) -> object:
     return cls
 
 
-def liveinstance(name=None) -> object:
+def liveinstance(name: str = None) -> object:
     """
     Decorator to track the attributes of a class instance
     Usage: instance = liveinstance("instance_name")(MyClass())
@@ -50,7 +49,7 @@ def liveinstance(name=None) -> object:
     return wrapper
     
 
-def livevar(name=None) -> object:
+def livevar(name: str = None) -> object:
     """
     Decorator to track the value of a variable.
     Usage: variable = livevar("variable_name")(value)
@@ -81,9 +80,7 @@ def trigger(func: callable) -> callable:
         raise TypeError("Function must have code.")
     
     # Register the function with empty args/kwargs initially
-    signature = inspect.signature(func)
-    param_names = list(signature.parameters.keys())
-    Register.trigger(func, param_names=param_names, args=[], kwargs={})
+    Register.trigger(func, args=[], kwargs={})
     
     # Return a wrapper that will be called when the function is invoked
     def wrapper(*args, **kwargs):

@@ -6,6 +6,10 @@ import json
 import ast
 
 class LiveConfig:
+    """
+    Initialiser class for LiveConfig.
+    Responsible for setting up the file handler for saving and loading variables.
+    """
     def __init__(self, path=None):
         self.path = path
         self.setup_file()
@@ -15,11 +19,7 @@ class LiveConfig:
         self.load()
 
     def setup_file(self) -> None:
-        """
-        This member method sets up the file for saving and loading variables.
-        If the filepath is provided by the user, otherwise it uses a default one.
-        It also checks if the path includes a filename.
-        """
+        """Sets up the file path for saving and loading variables."""
         if self.path is None:
             self.path = os.path.join(os.getcwd(), "variables.json")
         else:
@@ -35,10 +35,7 @@ class LiveConfig:
 
 
     def save(self) -> bool:
-        """
-        Saves all of the live variables to the specified file.
-        Returns True if success, False otherwise.
-        """
+        """Saves serialized values to the specified file."""
         serialized_instance = self.serialize_instances()
         serialized_variables = self.serialize_variables()
         data = {**serialized_instance, **serialized_variables}
@@ -53,11 +50,10 @@ class LiveConfig:
         
     def load(self) -> bool:
         """
-        Loads all of the variables from the specified file.
-        Saves type as a class variable.
-        Everything is stored as a string, then evaluated when loaded.
-        Manager then checks if values exist upon registering a live variable.
-        If exists then loads into position.
+        Loads the serialized values from the specified file.
+        It attempts to convert the string values back to their original types.
+        If the conversion fails, it keeps the value as a string.
+        The manager will then load these values into their correct place.
         """
         try:
             with open(self.path, 'r') as file:
@@ -92,9 +88,7 @@ class LiveConfig:
             return False
         
     def reload(self) -> bool:
-        """
-        Reloads the variables from the file.
-        """
+        """Reloads the saved values"""
         try:
             self.load()
             saved_instances = self.loaded_values.get("live_instances", {})
@@ -110,11 +104,7 @@ class LiveConfig:
             return False
         
     def serialize_instances(self) -> dict:
-        """
-        This member function serializes the live instances to be saved.
-        It removes any attributes that are not created by the user.
-        All attributes are converted to strings, so tuples/sets are not stored as lists.
-        """
+        """Serializes the instances to be saved."""
         instances = manager.live_instances
         serialized_instances = {}
         serialized_instances["live_instances"] = {}
@@ -131,10 +121,7 @@ class LiveConfig:
     
 
     def serialize_variables(self) -> dict:
-        """
-        This member function serializes the live variables to be saved.
-        All variables are converted to strings, so tuples/sets are not stored as lists.
-        """
+        """Serializes the live variables to be saved."""
         variables = manager.live_variables
         serialized_variables = {}
         serialized_variables["live_variables"] = {}

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="liveconfig",
-    version="0.1.2-beta.post1",
+    version="0.2.0-beta",
     packages=find_packages(),
     include_package_data=True,
     package_data={
@@ -10,7 +10,9 @@ setup(
     },
     author="Fergus Gault",
     author_email="gaultfergus@gmail.com",
-    description="Python package for developers which allows the live editing of class instance attributes to ease development of large python programs. LiveConfig will allow you to interact with values during program execution through an interface of your choice. Values can be saved, and loaded on startup.",
+    description="Python package for developers which allows the live editing of class instance attributes, and variables to ease development of large python programs. " \
+    "LiveConfig will allow you to interact with values during program execution through an interface of your choice. Values can be saved, and loaded on startup." \
+    "LiveConfig also provides function triggers, which allow you to call a function from the interface.",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     python_requires=">=3.8",

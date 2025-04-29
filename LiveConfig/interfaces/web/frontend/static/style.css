@@ -126,6 +126,16 @@ input[type="text"]:focus {
   margin: 20px 0;
 }
 
+/* Spin animation for reload */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .attribute-item form {

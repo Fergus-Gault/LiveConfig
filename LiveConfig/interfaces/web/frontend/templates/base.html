@@ -3,26 +3,50 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <title>{% block title %}{% endblock %} - LiveConfig</title>
   </head>
-  <body>
-    <nav class="navbar">
-      <ul>
-        <li><a href="{{url_for('index')}}">Home</a></li>
-        <li><a href="{{url_for('classes')}}">Classes</a></li>
-        <li><a href="{{url_for('variables')}}">Variables</a></li>
-        <li><a href="{{url_for('triggers')}}">Triggers</a></li>
-      </ul>
+  <body class="bg-dark text-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{url_for('index')}}">LiveConfig</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('index')}}"><i class="bi bi-house-door"></i> Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('classes')}}"><i class="bi bi-diagram-3"></i> Classes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('variables')}}"><i class="bi bi-code-square"></i> Variables</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('triggers')}}"><i class="bi bi-lightning"></i> Triggers</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
-    <section class="content">
-      <header>
-        <h1>{% block header %}{% endblock %}</h1>
+    
+    <div class="container">
+      <header class="mb-4 text-center">
+        <h1 class="display-5 fw-bold">{% block header %}{% endblock %}</h1>
       </header>
       {% block content %}{% endblock %}
-    </section>
+    </div>
+    
+    <!-- Bootstrap JS bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
 </html>

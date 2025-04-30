@@ -27,6 +27,7 @@ def classes():
         and "live_instances" in manager.file_handler.loaded_values:
         loaded_instances = manager.file_handler.loaded_values["live_instances"]
         all_instances = manager.file_handler.serialize_instances()["live_instances"]
+        # Merge loaded instances with all instances to get the latest state
         instances = {**loaded_instances, **all_instances}
     else:
         instances = manager.file_handler.serialize_instances()["live_instances"]

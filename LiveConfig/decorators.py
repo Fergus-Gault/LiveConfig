@@ -17,6 +17,7 @@ def liveclass(cls: object) -> object:
 
     def __setattr__(self, name, value) -> None:
         original_setattr(self, name, value)
+        # Only track attributes that are not private (not starting with "_")
         if name[0] != "_":
             self._tracked_attrs.add(name)
 

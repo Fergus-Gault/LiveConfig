@@ -126,7 +126,8 @@ class LiveManager:
         """
         This method sets the value of an attribute of a live instance.
         It parses the value to the correct type and sets it on the instance.
-
+        It further checks if the attribute is private and raises a warning if so.
+        
         Args:
             instance_name (str): Name of the instance.
             attr_name (str): Name of the attribute.

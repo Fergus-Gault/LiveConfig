@@ -23,8 +23,11 @@ def classes():
         manager.set_live_instance_attr_by_name(instance_name, attribute, value)
     
     # Use loaded_values if available, otherwise serialize current state
-    if manager.file_handler.loaded_values and "live_instances" in manager.file_handler.loaded_values:
-        instances = manager.file_handler.loaded_values["live_instances"]
+    if manager.file_handler.loaded_values \
+        and "live_instances" in manager.file_handler.loaded_values:
+        loaded_instances = manager.file_handler.loaded_values["live_instances"]
+        all_instances = manager.file_handler.serialize_instances()["live_instances"]
+        instances = {**loaded_instances, **all_instances}
     else:
         instances = manager.file_handler.serialize_instances()["live_instances"]
         
@@ -57,7 +60,8 @@ def triggers():
     """
     if request.method == 'POST':
         function_name = request.form.get('function_name')
-        kwargs = {param_name: request.form.get(f'arg[{param_name}]') for param_name in manager.get_function_args_by_name(function_name)}
+        kwargs = {param_name: request.form.get(f'arg[{param_name}]') 
+                  for param_name in manager.get_function_args_by_name(function_name)}
         manager.trigger_function_by_name(function_name, **kwargs)
     return render_template('triggers.html', function_triggers=manager.function_triggers)
 

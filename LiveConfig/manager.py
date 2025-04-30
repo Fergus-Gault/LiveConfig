@@ -23,12 +23,12 @@ class LiveManager:
         Args:
             saved_instances (dict): Instances that have been saved to a file.
         """
-        for name, attrs in saved_instances.items():
-            instance = self.live_instances.get(name)
+        for instance_name, attrs in saved_instances.items():
+            instance = self.get_live_instance_by_name(instance_name)
             if instance:
-                self.load_values_into_instance(instance, attrs)
+                self.load_values_into_instance(instance_name, instance, attrs)
 
-    def load_values_into_instance(self, instance: object, attrs: dict) -> object:
+    def load_values_into_instance(self, instance_name: str, instance: object, attrs: dict) -> object:
         """
         Loads the values of the attributes into the instance.
 
@@ -39,8 +39,17 @@ class LiveManager:
         Returns:
             object: The instance with the loaded values.
         """
+        to_pop = []
         for attr, value in attrs.items():
-            setattr(instance, attr, value)
+            if hasattr(instance, attr):
+                setattr(instance, attr, value)
+            else:
+                # Queue for removal if the attribute doesn't exist
+                to_pop.append(attr)
+
+        # Remove attributes that don't exist in the instance
+        for attr in to_pop:
+            self.file_handler.loaded_values["live_instances"][instance_name].pop(attr)
         return instance
     
     
@@ -127,6 +136,10 @@ class LiveManager:
         if instance is None: return
         attr = self.get_live_instance_attr_by_name(instance_name, attr_name)
         if attr is None: return
+        elif attr_name.startswith("_"):
+            logger.warning(
+                f"Attribute '{attr_name}' is private and cannot be modified")
+            return
         value = TypeChecker.handle_instance_type(instance, attr_name, value)
         if value is None: return         
         try:

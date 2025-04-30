@@ -1,8 +1,34 @@
-# **LiveConfig** - v0.2.1-beta
+<div align="center">
+
+# LiveConfig
+  
+  <p><i>Real-time configuration management for Python</i></p>
+  
+  <p>
+    <a href="https://pypi.org/project/liveconfig/">
+      <img src="https://img.shields.io/badge/version-v0.2.1--beta-orange" alt="Version">
+    </a>
+    <a href="https://pypi.org/project/liveconfig/">
+      <img src="https://img.shields.io/badge/python-3.8%2B-blue" alt="Python Version">
+    </a>
+    <a href="https://pepy.tech/projects/liveconfig">
+      <img src="https://static.pepy.tech/badge/liveconfig" alt="PyPI Downloads">
+    </a>
+    <a href="https://choosealicense.com/licenses/mit/">
+      <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
+    </a>
+  </p>
+  
+  <p>
+    <b>Edit variables in real-time</b> • <b>Save to JSON</b> • <b>Trigger functions</b> • <b>Multiple interfaces</b>
+  </p>
+  
+  <p align="center">
+    <img src="https://img.shields.io/badge/%E2%9A%A0%EF%B8%8F%20Beta%20Release-API%20subject%20to%20change-yellow" alt="Beta Warning">
+  </p>
+</div>
 
 LiveConfig is a Python package that allows developers to edit variables in real-time. All variables can be saved to a .json file and loaded automatically on startup. Function triggers can run a function from the interface and change behaviour during runtime. No more restarting your program every time you make a minor adjustment.
-
-> ⚠️ This is a beta release (v0.2.1-beta). APIs and features may change in future updates.
 
 ## Features
 

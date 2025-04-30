@@ -1,33 +1,26 @@
 [build-system]
-requires = ["setuptools >= 77.0.3"]
+requires = ["setuptools >= 77.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "liveconfig"
-version = "0.2.1b0"
+version = "0.2.1-beta"
 authors = [
-    {name = "Fergus Gault", email = "gaultfergus@gmail.com"}
+    { name = "Fergus Gault", email = "gaultfergus@gmail.com" }
 ]
-description = "Python package for developers which allows the live editing of class instance attributes, and variables to ease development of large python programs. LiveConfig will allow you to interact with values during program execution through an interface of your choice. Values can be saved, and loaded on startup. LiveConfig also provides function triggers, which allow you to call a function from the interface."
+description = "Edit variables and class instances live during runtime. CLI and web interfaces supported."
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.8"
-dependencies = [
-    "prompt_toolkit",
-    "flask",
-]
+dependencies = ["prompt_toolkit", "flask"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
     "Development Status :: 4 - Beta",
 ]
-license = "MIT"
-license-files = ["LICENSE"]
 
 [tool.setuptools]
 include-package-data = true
-
-[tool.setuptools.package-data]
-"liveconfig.web.frontend" = ["/templates/*.html", "/static/*.css", "/static/*.js"]
 
 [tool.setuptools.packages.find]
 include = ["liveconfig*"]

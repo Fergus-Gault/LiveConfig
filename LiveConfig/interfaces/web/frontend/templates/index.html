@@ -1,12 +1,63 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block header
-%}Home{% endblock %}{% block content %}
-<h2>Welcome to LiveConfig</h2>
-<p>
-  LiveConfig is a tool for editing variables during the execution of a python
-  program.
-</p>
-<p>Use the navigation bar to explore classes.</p>
-<p>
-  To get started, check out the <a href="{{url_for('classes')}}">Classes</a>
-</p>
+{% extends "base.html" %} 
+{% block title %}Home{% endblock %} 
+{% block header %}Welcome to LiveConfig{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <div class="card bg-dark border-secondary">
+      <div class="card-body text-center">
+        <i class="bi bi-gear-fill text-primary mb-3" style="font-size: 3rem;"></i>
+        <p class="lead">
+          LiveConfig is a tool for editing variables during the execution of a Python program.
+        </p>
+        <hr class="my-4 border-secondary">
+        <p>Use the navigation bar to explore your application.</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+          <a href="{{url_for('classes')}}" class="btn btn-primary btn-lg px-4 me-md-2">
+            <i class="bi bi-diagram-3 me-2"></i>Explore Classes
+          </a>
+          <a href="{{url_for('variables')}}" class="btn btn-outline-light btn-lg px-4">
+            <i class="bi bi-code-square me-2"></i>View Variables
+          </a>
+          <a href="{{url_for('triggers')}}" class="btn btn-outline-light btn-lg px-4">
+            <i class="bi bi-lightning me-2"></i>Triggers
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mt-5">
+      <div class="col-md-4">
+        <div class="card bg-dark border-secondary h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-diagram-3 text-info mb-3" style="font-size: 2rem;"></i>
+            <h5 class="card-title">Classes</h5>
+            <p class="card-text">View and edit instance attributes in real-time.</p>
+            <a href="{{url_for('classes')}}" class="btn btn-sm btn-outline-info">Explore</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-dark border-secondary h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-code-square text-warning mb-3" style="font-size: 2rem;"></i>
+            <h5 class="card-title">Variables</h5>
+            <p class="card-text">Edit live variables during program execution.</p>
+            <a href="{{url_for('variables')}}" class="btn btn-sm btn-outline-warning">Explore</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-dark border-secondary h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-lightning text-danger mb-3" style="font-size: 2rem;"></i>
+            <h5 class="card-title">Triggers</h5>
+            <p class="card-text">Execute functions directly from the web interface.</p>
+            <a href="{{url_for('triggers')}}" class="btn btn-sm btn-outline-danger">Explore</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

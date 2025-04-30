@@ -1,27 +1,58 @@
-{% extends "base.html" %} {% block title %}LiveConfig - Classes{% endblock %}
-{%block header %}Classes{% endblock %} {% block content %}
-<p>View and edit all live variables from within your program.</p>
-<div class="buttons-container">
-  <form method="post" , action="/save">
-    <button class="save-button" type="submit">Save All</button>
-  </form>
-  <!-- <form method="post", action="/reload">
-    <button class="reload-button" type="submit">Reload</button>
-  </form> -->
-</div>
-{% for name, value in live_variables.items() -%}
-    <div class="class-instance">
-    <h3 class="instance-name">{{ name }}</h3>
-    <ul class="attributes-list">
-        <li class="attribute-item">
-        <form method="post" action="">
-            <strong>{{ name }}:</strong>
-            <input type="text" name="value" value="{{ value }}" />
-            <input type="hidden" name="name" value="{{ name }}" />
-            <button class="update-button" type="submit">Update</button>
-        </form>
-        </li>
-    </ul>
+{% extends "base.html" %} 
+{% block title %}LiveConfig - Variables{% endblock %}
+{% block header %}Variables{% endblock %} 
+{% block content %}
+<div class="row mb-4">
+  <div class="col-md-8 mx-auto">
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      View and edit all live variables from within your program.
     </div>
-  {% endfor %} {% endblock %}
+  </div>
 </div>
+
+<div class="buttons-container">
+  <form method="post" action="/save">
+    <button class="btn save-button" type="submit">
+      <i class="bi bi-save me-1"></i> Save All
+    </button>
+  </form>
+  <form method="post" action="/reload">
+    <button class="btn reload-button" type="submit">
+      <i class="bi bi-arrow-clockwise me-1"></i> Reload
+    </button>
+  </form>
+</div>
+
+<div class="row">
+  {% for name, value in live_variables.items() -%}
+  <div class="col-md-6 mb-4">
+    <div class="class-instance">
+      <h3 class="instance-name">
+        <i class="bi bi-code-square me-2"></i>{{ name }}
+      </h3>
+      <ul class="attributes-list">
+        <li class="attribute-item">
+          <form method="post" action="">
+            <div class="row g-2 align-items-center">
+              <div class="col-md-3">
+                <strong>Value:</strong>
+              </div>
+              <div class="col">
+                <input type="text" class="form-control form-control-sm" name="value" value="{{ value }}" />
+                <input type="hidden" name="name" value="{{ name }}" />
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-sm update-button" type="submit">
+                  <i class="bi bi-check-lg me-1"></i>Update
+                </button>
+              </div>
+            </div>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

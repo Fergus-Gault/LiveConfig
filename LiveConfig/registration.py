@@ -40,7 +40,7 @@ class Register:
             and "live_instances" in manager.file_handler.loaded_values:
 
             saved_attrs = manager.file_handler.loaded_values["live_instances"].get(name, {})
-            instance = manager.load_values_into_instance(instance, saved_attrs)
+            instance = manager.load_values_into_instance(name, instance, saved_attrs)
         
         manager.live_instances[name] = instance
         # Register the instance in its class if it has a _instances attribute
@@ -115,6 +115,14 @@ class Register:
         func_name = func.__name__
         signature = inspect.signature(func)
         param_names = list(signature.parameters.keys())
+
+        # FIXME: Temporary solution to avoid triggers in classes
+        # Should be able to call instance methods as well
+        # Will need to generate for each instance of the class.
+        # Class will need to be a @liveclass
+        if "self" in param_names:
+            raise TypeError(
+                "Function trigger cannot be a member function.")
         
         # Update existing entry or create new one
         if func_name in manager.function_triggers:

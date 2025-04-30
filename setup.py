@@ -2,11 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name="liveconfig",
-    version="0.2.0-beta",
+    version="0.2.1-beta",
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        "liveconfig.interfaces.web.frontend": ['/templates/*.html', '/static/*.css'],
+        "liveconfig.interfaces.web.frontend": ['/templates/*.html', '/static/*.css', '/static/*.js'],
     },
     author="Fergus Gault",
     author_email="gaultfergus@gmail.com",

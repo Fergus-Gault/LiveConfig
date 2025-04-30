@@ -1,36 +1,61 @@
-{% extends "base.html" %} {% block title %}LiveConfig - Classes{% endblock %}
-{%block header %}Classes{% endblock %} {% block content %}
-<p>
-  View and edit all instance attributes from within your program.
-</p>
-<div class="buttons-container">
-  <form method="post" , action="/save">
-    <button class="save-button" type="submit">Save All</button>
-  </form>
-  <!-- <form method="post", action="/reload">
-    <button class="reload-button" type="submit">Reload</button>
-  </form> -->
-</div>
-  {% for instance_name, attrs in class_instances.items() -%}
-  <div class="class-instance">
-    <h3 class="instance-name">{{ instance_name }}</h3>
-    <ul class="attributes-list">
-      {% for attr, value in attrs.items() -%}
-      <li class="attribute-item">
-        <form method="post" action="">
-          <strong>{{ attr }}:</strong>
-          <input type="text" name="value" value="{{ value }}" />
-          <input
-            type="hidden"
-            name="instance_name"
-            value="{{ instance_name }}"
-          />
-          <input type="hidden" name="attribute" value="{{ attr }}" />
-          <button class="update-button" type="submit">Update</button>
-        </form>
-      </li>
-      {% endfor %}
-    </ul>
+{% extends "base.html" %} 
+{% block title %}LiveConfig - Classes{% endblock %}
+{% block header %}Classes{% endblock %} 
+{% block content %}
+<div class="row mb-4">
+  <div class="col-md-8 mx-auto">
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      View and edit all instance attributes from within your program.
+    </div>
   </div>
-  {% endfor %} {% endblock %}
 </div>
+
+<div class="buttons-container">
+  <form method="post" action="/save">
+    <button class="btn save-button" type="submit">
+      <i class="bi bi-save me-1"></i> Save All
+    </button>
+  </form>
+  <form method="post" action="/reload">
+    <button class="btn reload-button" type="submit">
+      <i class="bi bi-arrow-clockwise me-1"></i> Reload
+    </button>
+  </form>
+</div>
+
+<div class="row">
+  {% for instance_name, attrs in class_instances.items() -%}
+  <div class="col-md-6 mb-4">
+    <div class="class-instance">
+      <h3 class="instance-name">
+        <i class="bi bi-diagram-3 me-2"></i>{{ instance_name }}
+      </h3>
+      <ul class="attributes-list">
+        {% for attr, value in attrs.items() -%}
+        <li class="attribute-item">
+          <form method="post" action="">
+            <div class="row g-2 align-items-center">
+              <div class="col-md-3">
+                <strong>{{ attr }}:</strong>
+              </div>
+              <div class="col">
+                <input type="text" class="form-control form-control-sm" name="value" value="{{ value }}" />
+                <input type="hidden" name="instance_name" value="{{ instance_name }}" />
+                <input type="hidden" name="attribute" value="{{ attr }}" />
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-sm update-button" type="submit">
+                  <i class="bi bi-check-lg me-1"></i>Update
+                </button>
+              </div>
+            </div>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

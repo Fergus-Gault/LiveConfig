@@ -17,20 +17,20 @@ def liveclass(cls: object) -> object:
 
     def __setattr__(self, name, value) -> None:
         original_setattr(self, name, value)
-        if name != "_tracked_attrs":
+        # Only track attributes that are not private (not starting with "_")
+        if name[0] != "_":
             self._tracked_attrs.add(name)
 
     def get_tracked_attrs(self) -> set:
-        return {attr for attr in self._tracked_attrs if attr != "_tracked_attrs"}
+        return self._tracked_attrs
 
     def get_tracked_attrs_values(self) -> dict:
-        return {name: getattr(self, name) for name in self._tracked_attrs if name != "_tracked_attrs"}
+        return {name: getattr(self, name) for name in self._tracked_attrs}
 
     cls.__init__ = __init__
     cls.__setattr__ = __setattr__
     cls.get_tracked_attrs = get_tracked_attrs
     cls.get_tracked_attrs_values = get_tracked_attrs_values
-
     Register.cls(cls)
     return cls
 

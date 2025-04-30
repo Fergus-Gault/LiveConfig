@@ -21,7 +21,18 @@ def classes():
         attribute = request.form.get('attribute')
         value = request.form.get('value')
         manager.set_live_instance_attr_by_name(instance_name, attribute, value)
-    return render_template('classes.html', class_instances=manager.file_handler.serialize_instances()["live_instances"])
+    
+    # Use loaded_values if available, otherwise serialize current state
+    if manager.file_handler.loaded_values \
+        and "live_instances" in manager.file_handler.loaded_values:
+        loaded_instances = manager.file_handler.loaded_values["live_instances"]
+        all_instances = manager.file_handler.serialize_instances()["live_instances"]
+        # Merge loaded instances with all instances to get the latest state
+        instances = {**loaded_instances, **all_instances}
+    else:
+        instances = manager.file_handler.serialize_instances()["live_instances"]
+        
+    return render_template('classes.html', class_instances=instances)
 
 @app.route('/variables', methods=['GET', 'POST'])
 def variables():
@@ -33,7 +44,14 @@ def variables():
         variable_name = request.form.get('name')
         value = request.form.get('value')
         manager.set_live_variable_by_name(variable_name, value)
-    return render_template('variables.html', live_variables=manager.file_handler.serialize_variables()["live_variables"])
+    
+    # Use loaded_values if available, otherwise serialize current state
+    if manager.file_handler.loaded_values and "live_variables" in manager.file_handler.loaded_values:
+        variables = manager.file_handler.loaded_values["live_variables"]
+    else:
+        variables = manager.file_handler.serialize_variables()["live_variables"]
+        
+    return render_template('variables.html', live_variables=variables)
 
 @app.route('/triggers', methods=['GET', 'POST'])
 def triggers():
@@ -43,7 +61,8 @@ def triggers():
     """
     if request.method == 'POST':
         function_name = request.form.get('function_name')
-        kwargs = {param_name: request.form.get(f'arg[{param_name}]') for param_name in manager.get_function_args_by_name(function_name)}
+        kwargs = {param_name: request.form.get(f'arg[{param_name}]') 
+                  for param_name in manager.get_function_args_by_name(function_name)}
         manager.trigger_function_by_name(function_name, **kwargs)
     return render_template('triggers.html', function_triggers=manager.function_triggers)
 
@@ -56,8 +75,8 @@ def save():
 @app.route('/reload', methods=['POST'])
 def reload():
     """Reload the current variables."""
-    manager.file_handler.reload()
-    return '', 204
+    success = manager.file_handler.reload()
+    return {'success': success}, 200 if success else 500
 
 
 

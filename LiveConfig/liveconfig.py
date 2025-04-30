@@ -112,7 +112,7 @@ class LiveConfig:
             attributes = vars(live_instance)
             clean_attrs = {}
             for attr, value in attributes.items():
-                if attr.startswith("__") or attr.startswith("_tracked_attrs"):
+                if attr.startswith("__") or attr.startswith("_"):
                     continue
                 clean_attrs[attr] = str(value)
 
